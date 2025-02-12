@@ -6,10 +6,9 @@ import com.partner.api.exception.AssociateNotFound;
 import com.partner.api.exception.CompanyNotFound;
 import com.partner.constants.AssociateConstantStatus;
 import com.partner.constants.AssociateConstantType;
-import com.partner.model.Company;
 import com.partner.persistence.AssociatePersistence;
 import com.partner.model.Associate;
-import com.partner.util.CompanyThreadLocal;
+import com.partner.service.util.CompanyDynamicQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +26,10 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Autowired
     public AssociateServiceImpl(
-        AssociatePersistence associatePersistence) {
+            AssociatePersistence associatePersistence, CompanyDynamicQuery companyDynamicQuery) {
 
         this._associatePersistence = associatePersistence;
+        this._companyDynamicQuery = companyDynamicQuery;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AssociateServiceImpl implements AssociateService {
             long companyId, String name, String status, String type)
         throws AssociateAttributeInvalid, CompanyNotFound {
 
-        if (!_hasCompany())
+        if (!_companyDynamicQuery.hasCompany(companyId))
             throw new CompanyNotFound(
                     "No company found with id %s".formatted(companyId));
 
@@ -51,7 +51,7 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setCreateDate(new Date());
         associate.setCompanyId(companyId);
 
-        return associate;
+        return _associatePersistence.save(associate);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AssociateServiceImpl implements AssociateService {
     public Associate fetchAssociateByCompanyId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound {
 
-        if (!_hasCompany()) {
+        if (!_companyDynamicQuery.hasCompany(companyId)) {
             throw new CompanyNotFound(
                 "Unable to find associate with companyId %s".formatted(companyId));
         }
@@ -133,7 +133,7 @@ public class AssociateServiceImpl implements AssociateService {
     public List<Associate> fetchAllAssociatesByCompanyId(long companyId)
         throws CompanyNotFound {
 
-        if (_hasCompany())
+        if (!_companyDynamicQuery.hasCompany(companyId))
             return new ArrayList<>();
 
         return _associatePersistence.findByCompanyId(companyId);
@@ -190,10 +190,6 @@ public class AssociateServiceImpl implements AssociateService {
 
     }
 
-    private boolean _hasCompany() {
-        return CompanyThreadLocal.getCompanyThreadLocal().getCompanyId() > 0;
-    }
-
     private void _validate(String name, String status, String type)
         throws AssociateAttributeInvalid {
 
@@ -204,7 +200,7 @@ public class AssociateServiceImpl implements AssociateService {
             List<String> typesList =
                     AssociateConstantType.getAssociateConstantsTypeList();
 
-            if (!name.matches("[A-Za-z]")) {
+            if (!name.matches("^[A-Za-z]+(?: [A-Za-z]+)*$")) {
                 throw new AssociateAttributeInvalid(
                     "Invalid attribute name %s".formatted(name));
             }
@@ -224,5 +220,7 @@ public class AssociateServiceImpl implements AssociateService {
     }
 
     private final AssociatePersistence _associatePersistence;
+
+    private final CompanyDynamicQuery _companyDynamicQuery;
 
 }

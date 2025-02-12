@@ -5,7 +5,7 @@ import com.partner.api.exception.CompanyNotFound;
 import com.partner.constants.AssociateConstantType;
 import com.partner.model.Benefit;
 import com.partner.persistence.BenefitPersistence;
-import com.partner.util.CompanyThreadLocal;
+import com.partner.service.util.CompanyDynamicQuery;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,8 +24,11 @@ import org.springframework.stereotype.Service;
 public class BenefitServiceImpl implements BenefitService {
 
     @Autowired
-    public BenefitServiceImpl(BenefitPersistence benefitPersistence) {
+    public BenefitServiceImpl(
+            BenefitPersistence benefitPersistence, CompanyDynamicQuery companyDynamicQuery) {
+
         this._benefitPersistence = benefitPersistence;
+        this._companyDynamicQuery = companyDynamicQuery;
     }
 
     @Override
@@ -37,11 +40,11 @@ public class BenefitServiceImpl implements BenefitService {
     public List<Benefit> fetchAllBenefitsByType(
             long companyId, String type) throws CompanyNotFound {
 
-        if (CompanyThreadLocal.getCompanyThreadLocal() == null) {
-            return new ArrayList<>();
+        if (_companyDynamicQuery.hasCompany(companyId)) {
+            return _readBenefitFromJson(type);
         }
 
-        return _readBenefitFromJson(type);
+        return new ArrayList<>();
     }
 
     private List<Benefit> _readBenefitFromJson(String type) {
@@ -111,5 +114,7 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     private final BenefitPersistence _benefitPersistence;
+
+    private final CompanyDynamicQuery _companyDynamicQuery;
 
 }

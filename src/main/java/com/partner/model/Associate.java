@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 
 import java.util.Date;
 
@@ -61,14 +60,13 @@ public class Associate {
 
     @Override
     public String toString() {
-        return "Associate:\n\t" +
-                "{\n\t" +
-                    "companyId: " + companyId + ", \n\t" +
-                    "create-date: " + createDate + ", \n\t" +
-                    "id: " + associateId + ", \n\t" +
-                    "name: " + associateName + ", \n\t" +
-                    "status: " + associateStatus + ", \n\t" +
-                    "type: " + associateType + "\n\t" +
+        return "Associate: {\n" +
+                    "\t companyId: " + companyId + ", \n\t" +
+                    "\t create-date: " + createDate + ", \n\t" +
+                    "\t id: " + associateId + ", \n\t" +
+                    "\t name: " + associateName + ", \n\t" +
+                    "\t status: " + associateStatus + ", \n\t" +
+                    "\t type: " + associateType + "\n" +
                "}\n\t";
     }
 
