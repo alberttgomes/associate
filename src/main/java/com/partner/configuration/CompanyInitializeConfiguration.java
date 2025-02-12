@@ -2,7 +2,6 @@ package com.partner.configuration;
 
 import com.partner.api.CompanyService;
 import com.partner.model.Company;
-import com.partner.util.CompanyThreadLocal;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -52,12 +51,8 @@ public class CompanyInitializeConfiguration {
                         companyEmail, companyName);
             }
 
-            Company company = _companyService.addCompany(
+            return  _companyService.addCompany(
                 0L, companyEmail, companyName, companyPhone);
-
-            CompanyThreadLocal.setCompanyThreadLocal(company);
-
-            return company;
         }
         catch (Exception exception) {
             throw new Exception(exception);

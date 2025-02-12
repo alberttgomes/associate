@@ -3,6 +3,7 @@ package com.partner.service.util;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.partner.engineer.database.BaseDatabaseEngineer;
 import org.springframework.stereotype.Component;
 
 /**

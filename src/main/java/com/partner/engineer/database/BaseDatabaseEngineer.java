@@ -1,4 +1,4 @@
-package com.partner.service.util;
+package com.partner.engineer.database;
 
 import java.io.InputStream;
 import java.sql.Connection;

@@ -41,7 +41,7 @@ public interface AssociateActionService {
         throws AssociateNotFound;
 
     void updatePlanAssociate(
-            long associateId, String oldPlan, String newPlan)
+            long associateId, String oldType, String newType)
         throws AssociateNotFound;
 
 }
