@@ -193,8 +193,8 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public void updatePlanAssociate(
-            long associateId, String oldPlan, String newPlan)
+    public void updateAssociateType(
+            long associateId, String oldType, String newType)
         throws AssociateNotFound {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
@@ -205,8 +205,8 @@ public class AssociateActionServiceImpl implements AssociateActionService {
                         associateId));
         }
 
-        if (associate.getAssociateType().equals(oldPlan)) {
-            associate.setAssociateType(newPlan);
+        if (associate.getAssociateType().equals(oldType)) {
+            associate.setAssociateType(newType);
         }
 
         _associateService.updateAssociate(

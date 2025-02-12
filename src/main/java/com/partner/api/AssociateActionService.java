@@ -41,7 +41,7 @@ public interface AssociateActionService {
     String suspendPlanAssociate(long associateId, String reason)
         throws AssociateNotFound;
 
-    void updatePlanAssociate(
+    void updateAssociateType(
             long associateId, String oldType, String newType)
         throws AssociateNotFound;
 
