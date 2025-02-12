@@ -1,13 +1,11 @@
 package com.partner.configuration;
 
 import com.partner.api.CompanyService;
+import com.partner.engineer.batch.BatchTaskSupportEngineer;
 import com.partner.model.Company;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +36,7 @@ public class CompanyInitializeConfiguration {
             String content = new String(inputStream.readAllBytes());
 
             Map<String, String> companyProperties =
-                    _readCompanyProperties(content);
+                    BatchTaskSupportEngineer.readCompanyProperties(content);
 
             String companyEmail = companyProperties.get("company.email.props");
             String companyName = companyProperties.get("company.name.props");
@@ -58,21 +56,6 @@ public class CompanyInitializeConfiguration {
             throw new Exception(exception);
         }
 
-    }
-
-    private Map<String, String> _readCompanyProperties(String content) {
-        Pattern pattern = Pattern.compile(
-                "(company\\.(email|phone|name)\\.props)=((\\w*.*)+)");
-
-        Matcher matcher = pattern.matcher(content);
-
-        Map<String, String> companyProperties = new HashMap<>();
-
-        while (matcher.find()) {
-            companyProperties.put(matcher.group(1), matcher.group(3));
-        }
-
-        return companyProperties;
     }
 
     private final CompanyService _companyService;

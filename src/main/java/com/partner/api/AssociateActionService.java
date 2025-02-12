@@ -3,6 +3,7 @@ package com.partner.api;
 import com.partner.api.exception.AssociateNotFound;
 import com.partner.api.exception.BenefitNotFound;
 import com.partner.api.exception.CompanyNotFound;
+import com.partner.model.Associate;
 import com.partner.model.Benefit;
 import com.partner.model.Notify;
 
@@ -21,7 +22,7 @@ public interface AssociateActionService {
     List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound;
 
-    List<Benefit> fetchAllBenefits() throws BenefitNotFound;
+    List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound;
 
     List<Notify> getNotifiesByAssociateId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound;
@@ -34,10 +35,10 @@ public interface AssociateActionService {
             String notifyTitle, long receiver)
         throws AssociateNotFound;
 
-    void reactivePlanAssociate(
+    Associate reactivePlanAssociate(
             long associateId, String status, String type) throws AssociateNotFound;
 
-    void suspendPlanAssociate(long associateId, String reason)
+    String suspendPlanAssociate(long associateId, String reason)
         throws AssociateNotFound;
 
     void updatePlanAssociate(

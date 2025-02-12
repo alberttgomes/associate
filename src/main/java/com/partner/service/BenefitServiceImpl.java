@@ -41,13 +41,13 @@ public class BenefitServiceImpl implements BenefitService {
             long companyId, String type) throws CompanyNotFound {
 
         if (_companyDynamicQuery.hasCompany(companyId)) {
-            return _readBenefitFromJson(type);
+            return _readBenefitFromJson(companyId, type);
         }
 
         return new ArrayList<>();
     }
 
-    private List<Benefit> _readBenefitFromJson(String type) {
+    private List<Benefit> _readBenefitFromJson(long companyId, String type) {
         if (!AssociateConstantType.getAssociateConstantsTypeList().contains(type)) {
             return new ArrayList<>(0);
         }
@@ -69,10 +69,10 @@ public class BenefitServiceImpl implements BenefitService {
             throw new RuntimeException(e);
         }
 
-        return _getBenefits(type, content);
+        return _getBenefits(companyId, content, type);
     }
 
-    private List<Benefit> _getBenefits(String type, String content) {
+    private List<Benefit> _getBenefits(long companyId, String content, String type) {
         List<Benefit> benefits = new ArrayList<>();
 
         JSONObject jsonObject = new JSONObject(content);
@@ -93,6 +93,7 @@ public class BenefitServiceImpl implements BenefitService {
                 Benefit benefit = new Benefit();
                 benefit.setBenefitName(benefitName);
                 benefit.setBenefitStatus(benefitStatus);
+                benefit.setCompanyId(companyId);
 
                 JSONObject resourcesObject = benefitObject.optJSONObject("resources");
 
@@ -100,9 +101,11 @@ public class BenefitServiceImpl implements BenefitService {
                     benefit.setBenefitResources(resourcesObject.toString());
                 }
 
-                Benefit benefitCreated = _benefitPersistence.save(benefit);
+                if (_benefitPersistence.findByBenefitName(benefitName) != null) {
+                    benefit = _benefitPersistence.save(benefit);
+                }
 
-                benefits.add(benefitCreated);
+                benefits.add(benefit);
             }
         }
         else {

@@ -3,7 +3,6 @@ package com.partner.service;
 import com.partner.api.AssociateActionService;
 import com.partner.api.AssociateService;
 import com.partner.api.BenefitService;
-import com.partner.api.CompanyService;
 import com.partner.api.exception.AssociateNotFound;
 import com.partner.api.exception.BenefitNotFound;
 import com.partner.api.exception.CompanyNotFound;
@@ -81,8 +80,9 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public List<Benefit> fetchAllBenefits() throws BenefitNotFound {
-        Iterable<Benefit> iterable = _benefitPersistence.findAll();
+    public List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound {
+        Iterable<Benefit> iterable =
+                _benefitPersistence.findAllByCompanyId(companyId);
 
         List<Benefit> benefits = new ArrayList<>();
 
@@ -144,7 +144,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public void reactivePlanAssociate(
+    public Associate reactivePlanAssociate(
             long associateId, String status, String type) throws AssociateNotFound {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
@@ -158,13 +158,15 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         if (status.equals(AssociateConstantStatus.APPROVED) &&
                 AssociateConstantType.getAssociateConstantsTypeList().contains(type)) {
 
-            _associateService.updateAssociate(
+            return _associateService.updateAssociate(
                     associateId, associate.getAssociateName(), status, type);
         }
+
+        return null;
     }
 
     @Override
-    public void suspendPlanAssociate(
+    public String suspendPlanAssociate(
             long associateId, String reason) throws AssociateNotFound {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
@@ -186,6 +188,8 @@ public class AssociateActionServiceImpl implements AssociateActionService {
             System.out.printf(
                 "Associate don't have a valid plan situation to suspend. %s%n", type);
         }
+
+        return associate.getAssociateStatus();
     }
 
     @Override

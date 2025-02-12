@@ -54,7 +54,6 @@ public class Benefit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long benefitId;
 
     @Column(length = 30, nullable = false, unique = true)
