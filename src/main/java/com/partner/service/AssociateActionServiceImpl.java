@@ -16,7 +16,6 @@ import com.partner.persistence.NotifyPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,47 +38,6 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
-        throws AssociateNotFound, CompanyNotFound {
-
-        Associate associate =
-                _associateService.fetchAssociateById(associateId);
-
-        if (associate == null) {
-            throw new AssociateNotFound(
-                "Unable to take benefits. Associate not found with id %s".formatted(
-                        associateId));
-        }
-
-        return _benefitService.fetchAllBenefitsByType(
-                    companyId, associate.getAssociateType());
-    }
-
-    @Override
-    public List<Benefit> fetchBenefitsByAssociateId(long associateId)
-        throws AssociateNotFound {
-
-        if (_associateService.fetchAssociateById(associateId) == null) {
-            return new ArrayList<>();
-        }
-
-        Iterable<Benefit> iterable = _benefitPersistence.findAll();
-
-        List<Benefit> benefits = new ArrayList<>();
-
-        iterable.forEach(benefits::add);
-
-        return benefits;
-    }
-
-    @Override
-    public Benefit fetchBenefitById(long benefitId) throws BenefitNotFound {
-        Optional<Benefit> benefitOptional = _benefitPersistence.findById(benefitId);
-
-        return benefitOptional.orElse(null);
-    }
-
-    @Override
     public List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound {
         Iterable<Benefit> iterable =
                 _benefitPersistence.findAllByCompanyId(companyId);
@@ -89,6 +47,33 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         iterable.forEach(benefits::add);
 
         return benefits;
+    }
+
+    @Override
+    public List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
+            throws AssociateNotFound, CompanyNotFound {
+
+        Associate associate =
+                _associateService.fetchAssociateById(associateId);
+
+        if (associate == null) {
+            return new ArrayList<>();
+        }
+
+        return _benefitService.fetchAllBenefitsByAssociateType(
+                associate.getAssociateType(), companyId);
+    }
+
+    @Override
+    public Benefit fetchBenefit(long associateId, long benefitId, long companyId)
+        throws AssociateNotFound, BenefitNotFound {
+
+        if (_associateService.hasAssociateById(associateId, companyId)) {
+            return _benefitService.fetchBenefitById(benefitId);
+        }
+        else throw new AssociateNotFound(
+            "Unable to take benefit from the associate. Associate not found with primary key %s"
+                    .formatted(associateId));
     }
 
     @Override

@@ -12,12 +12,20 @@ import jakarta.persistence.Id;
 @Entity
 public class Benefit {
 
+    public Long getBenefitId() {
+        return benefitId;
+    }
+
     public void setBenefitId(long benefitId) {
         this.benefitId = benefitId;
     }
 
-    public Long getBenefitId() {
-        return benefitId;
+    public String getBenefitCategory() {
+        return benefitCategory;
+    }
+
+    public void setBenefitCategory(String benefitCategory) {
+        this.benefitCategory = benefitCategory;
     }
 
     public String getBenefitName() {
@@ -55,6 +63,9 @@ public class Benefit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long benefitId;
+
+    @Column(nullable = false, length = 50)
+    private String benefitCategory;
 
     @Column(length = 30, nullable = false, unique = true)
     private String benefitName;

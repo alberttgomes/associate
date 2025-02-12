@@ -14,15 +14,13 @@ import java.util.List;
  */
 public interface AssociateActionService {
 
-    List<Benefit> fetchBenefitsByAssociateId(
-            long associateId) throws AssociateNotFound;
-
-    Benefit fetchBenefitById(long benefitId) throws BenefitNotFound;
+    List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound;
 
     List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
-        throws AssociateNotFound, CompanyNotFound;
+    throws AssociateNotFound, CompanyNotFound;
 
-    List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound;
+    Benefit fetchBenefit(long associateId, long benefitId, long companyId)
+        throws AssociateNotFound, BenefitNotFound;
 
     List<Notify> getNotifiesByAssociateId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound;

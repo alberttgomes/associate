@@ -16,7 +16,7 @@ public class AssociateConstantType {
     public static final String SILVER = "silver";
 
     public static List<String> getAssociateConstantsTypeList() {
-        return List.of(BRONZE, GOLD, PLATINUM, SILVER);
+        return List.of(BRONZE, GOLD, SILVER);
     }
 
 }
