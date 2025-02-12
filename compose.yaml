@@ -1,1 +1,11 @@
 services:
+  database:
+    image: mysql:8.0
+    container_name: associate_database
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=associate
+      - MYSQL_USER=associate
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3307:3306"

@@ -1,0 +1,122 @@
+{
+  "bronze": {
+      "benefit": [
+        {
+          "name": "One Bronze",
+          "resources": {
+            "discount": {
+              "material": "15%",
+              "travel": "7%,",
+              "platform": "unlimited"
+            },
+            "events": {
+              "company-areas": "all",
+              "company-out-office": {
+                "includes": "false",
+                "percentage" : "0%"
+              }
+            }
+          }
+        },
+        {
+          "name": "Two Bronze",
+          "resources": {
+            "discount": {
+              "material": "15%",
+              "travel": "15%,",
+              "platform": "unlimited"
+            },
+            "events": {
+              "company-areas": "all",
+              "company-out-office": {
+                "includes": "false",
+                "percentage" : "0%"
+              }
+            }
+          }
+        }
+      ]
+  },
+  "platinum": {
+    "benefit": [
+      {
+
+      }
+    ]
+  },
+  "silver": {
+    "benefit": [
+      {
+        "name": "One Silver",
+        "resources": {
+          "discount": {
+            "material": "20%",
+            "travel": "17%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+               "includes": "true",
+               "percentage" : "65%"
+            },
+            "company-meets": {
+               "if-you-will-talk": "true",
+               "if-you-will-see": "false"
+            }
+          }
+        }
+      },
+      {
+        "name": "Two Silver",
+        "resources": {
+          "discount": {
+            "material": "25%",
+            "travel": "20%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+              "includes": "true",
+              "percentage": "75%"
+            },
+            "company-meets": {
+              "if-you-will-talk": "true",
+              "if-you-will-see": "false"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "gold": {
+    "benefit": [
+      {
+        "name": "One Gold",
+        "resources": {
+          "discount": {
+            "material": "35%",
+            "travel": "50%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+              "includes": "true",
+              "percentage": "100%"
+            },
+            "company-meets": {
+              "if-you-will-talk": "true",
+              "if-you-will-see": "true"
+            }
+          },
+          "health": {
+            "dentist": "true",
+            "life": "true"
+          }
+        }
+      }
+    ]
+  }
+}

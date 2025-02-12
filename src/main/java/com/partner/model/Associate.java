@@ -2,7 +2,10 @@ package com.partner.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 
 import java.util.Date;
 
@@ -13,69 +16,79 @@ import java.util.Date;
 public class Associate {
 
     public Long getAssociateId() {
-        return _associateId;
-    }
-
-    public void setAssociateId(Long associateId) {
-        this._associateId = associateId;
+        return associateId;
     }
 
     public String getAssociateName() {
-        return _associateName;
+        return associateName;
     }
 
     public void setAssociateName(String associateName) {
-        this._associateName = associateName;
+        this.associateName = associateName;
     }
 
     public String getAssociateStatus() {
-        return _associateStatus;
+        return associateStatus;
     }
 
     public void setAssociateStatus(String associateStatus) {
-        this._associateStatus = associateStatus;
+        this.associateStatus = associateStatus;
     }
 
     public String getAssociateType() {
-        return _associateType;
+        return associateType;
     }
 
     public void setAssociateType(String associateType) {
-        this._associateType = associateType;
+        this.associateType = associateType;
+    }
+
+    public long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
     }
 
     public Date getCreateDate() {
-        return _createDate;
+        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
-        this._createDate = createDate;
+        this.createDate = createDate;
     }
 
     @Override
     public String toString() {
-        return "Associate: { " +
-                    "create-date: " + _createDate + "," +
-                    "id: " +_associateId + "," +
-                    "name: " +_associateName + "," +
-                    "status: " +_associateStatus + "," +
-                    "type: " +_associateType +
-               "}";
+        return "Associate:\n\t" +
+                "{\n\t" +
+                    "companyId: " + companyId + ", \n\t" +
+                    "create-date: " + createDate + ", \n\t" +
+                    "id: " + associateId + ", \n\t" +
+                    "name: " + associateName + ", \n\t" +
+                    "status: " + associateStatus + ", \n\t" +
+                    "type: " + associateType + "\n\t" +
+               "}\n\t";
     }
 
     @Id
-    private Long _associateId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long associateId;
 
     @Column(unique=true, length = 100, nullable = false)
-    private String _associateName;
+    private String associateName;
 
     @Column(length = 25, nullable = false)
-    private String _associateStatus;
+    private String associateStatus;
 
     @Column(length = 25, nullable = false)
-    private String _associateType;
+    private String associateType;
+
+    @Column(length = 100, nullable = false)
+    private long companyId;
 
     @Column(length = 50, nullable = false)
-    private Date _createDate;
+    private Date createDate;
 
 }
