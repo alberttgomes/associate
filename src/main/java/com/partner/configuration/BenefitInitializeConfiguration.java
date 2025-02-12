@@ -121,18 +121,18 @@ public class BenefitInitializeConfiguration {
         }
     }
 
-    private void _putContentJSONCache(String value) {
+    private static String _getContentJSONCache() {
+        CacheEntry entry = _cache.get("benefits");
+
+        return (entry != null) ? entry.getValue() : null;
+    }
+
+    private static void _putContentJSONCache(String value) {
         if (_cache.containsKey("benefits")) return;
 
         CacheEntry entry = new CacheEntry(value);
 
         _cache.put("benefits", entry);
-    }
-
-    private String _getContentJSONCache() {
-        CacheEntry entry = _cache.get("benefits");
-
-        return (entry != null) ? entry.getValue() : null;
     }
 
     private final BenefitService _benefitService;
