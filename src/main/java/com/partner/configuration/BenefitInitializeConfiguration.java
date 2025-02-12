@@ -72,11 +72,12 @@ public class BenefitInitializeConfiguration {
 
                 Benefit benefit = null;
 
+                String resources = resourcesObject.optString("resources", "N/A");
+
                 if (_benefitService.fetchBenefitByName(benefitName) == null) {
                     benefit = _benefitService.addBenefit(
-                            benefitName, benefitStatus,
-                            resourcesObject.optString("resources", "N/A"),
-                            type, companyId);
+                            benefitName, benefitStatus, resources, type,
+                            companyId);
                 }
 
                 benefits.add(benefit);
