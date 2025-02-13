@@ -182,6 +182,10 @@ public class AssociateActionServiceImpl implements AssociateActionService {
             long associateId, String oldType, String newType)
         throws AssociateNotFound {
 
+        if (!AssociateConstantType.getAssociateConstantsTypeList().contains(newType)) {
+            return;
+        }
+
         Associate associate = _associateService.fetchAssociateById(associateId);
 
         if (associate == null) {
