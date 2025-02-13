@@ -1,13 +1,13 @@
 package com.associate;
 
-import com.associate.api.AssociateService;
-import com.associate.api.CompanyService;
+import com.associate.associate.api.AssociateService;
+import com.associate.company.api.CompanyService;
 
-import com.associate.api.exception.AssociateAttributeInvalid;
-import com.associate.constants.AssociateConstantStatus;
-import com.associate.constants.AssociateConstantType;
-import com.associate.model.Associate;
-import com.associate.model.Company;
+import com.associate.associate.api.exception.AssociateAttributeInvalid;
+import com.associate.associate.constants.AssociateConstantStatus;
+import com.associate.associate.constants.AssociateConstantType;
+import com.associate.associate.model.Associate;
+import com.associate.company.model.Company;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
