@@ -51,9 +51,8 @@ public class AssociateRest {
         createAssociate(@RequestBody AssociateDto associateDto) {
 
         Associate associate = _associateService.addAssociate(
-                associateDto.companyId(), associateDto.name(),
-                associateDto.status(), associateDto.type(),
-                associateDto.email());
+                associateDto.email(), associateDto.companyId(), associateDto.name(),
+                associateDto.status(), associateDto.type());
 
         if (associate == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

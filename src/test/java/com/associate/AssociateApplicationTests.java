@@ -32,10 +32,9 @@ class AssociateApplicationTests {
     @Test
     void testAddNewAssociateWithValidCompany() {
         Associate associate = _associateService.addAssociate(
-                _company.getCompanyId(),
-                "Albert Gomes Cabral",
-                AssociateConstantStatus.APPROVED,
-                AssociateConstantType.GOLD, "albert.gomes@gmail.com");
+                "albert.gomes@gmail.com", _company.getCompanyId(),
+                "Albert Gomes Cabral", AssociateConstantStatus.APPROVED,
+                AssociateConstantType.GOLD);
 
         Assert.notNull(
             associate, "testAddNewAssociateWithValidCompany passed.");
@@ -46,24 +45,23 @@ class AssociateApplicationTests {
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
-                        _company.getCompanyId(), "Miguel Garza",
-                        "unknown", AssociateConstantType.GOLD,
-                        "albert.gomes@gmail.com"));
+                        "albert.gomes@gmail.com", _company.getCompanyId(),
+                        "Miguel Garza", "unknown",
+                        AssociateConstantType.GOLD));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
-                        _company.getCompanyId(), "Felipe Silva",
-                        AssociateConstantStatus.APPROVED, "unknown",
-                        "albert.gomes@gmail.com"));
+                        "albert.gomes@gmail.com", _company.getCompanyId(),
+                        "Felipe Silva", AssociateConstantStatus.APPROVED,
+                        "unknown"));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
-                        _company.getCompanyId(), "1234MyNameIs@#1",
-                        AssociateConstantStatus.APPROVED,
-                        AssociateConstantType.GOLD,
-                        "albert.gomes@gmail.com"));
+                        "albert.gomes@gmail.com", _company.getCompanyId(),
+                        "1234MyNameIs@#1", AssociateConstantStatus.APPROVED,
+                        AssociateConstantType.GOLD));
     }
 
     @BeforeAll

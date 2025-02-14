@@ -14,8 +14,8 @@ import java.util.List;
 public interface AssociateService {
 
     Associate addAssociate(
-            long companyId, String name, String status, String type, String email)
-        throws AssociateAttributeInvalid, CompanyNotFound;
+            String email, long companyId, String name, String status, String type)
+            throws RuntimeException;
 
     Associate createAssociateWithAddress(
             Address address, long companyId, String email, String name, String type)
