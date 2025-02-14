@@ -194,7 +194,8 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate updateAssociate(
-            long associatedId, String name, String status, String type)
+            long associatedId, String email, String name, String status,
+            String type)
         throws AssociateNotFound {
 
         try {
@@ -208,8 +209,10 @@ public class AssociateServiceImpl implements AssociateService {
 
             Associate associateNew = associateOld.get();
 
-            _validate("", name, status, type);
+            _validate(email, name, status, type);
 
+            associateNew.setAssociateEmail(email);
+            associateNew.setAssociateId(associatedId);
             associateNew.setAssociateName(name);
             associateNew.setAssociateStatus(status);
             associateNew.setAssociateType(type);

@@ -46,7 +46,8 @@ public interface AssociateService {
     boolean hasAssociateById(long associateId, long companyId);
 
     Associate updateAssociate(
-            long associatedId, String name, String status, String type)
+            long associatedId, String email, String name, String status,
+            String type)
         throws AssociateNotFound;
 
 }

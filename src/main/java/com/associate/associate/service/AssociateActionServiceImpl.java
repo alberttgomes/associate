@@ -134,8 +134,11 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         if (status.equals(AssociateConstantStatus.APPROVED) &&
                 AssociateConstantType.getAssociateConstantsTypeList().contains(type)) {
 
+            String associateEmail = associate.getAssociateEmail();
+            String associateName = associate.getAssociateName();
+
             return _associateService.updateAssociate(
-                    associateId, associate.getAssociateName(), status, type);
+                    associateId, associateEmail, associateName, status, type);
         }
 
         return null;
@@ -156,8 +159,11 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         String type = associate.getAssociateType();
 
         if (type.equals(AssociateConstantStatus.APPROVED)) {
+            String associateEmail = associate.getAssociateEmail();
+            String associateName = associate.getAssociateName();
+
             _associateService.updateAssociate(
-                    associateId, associate.getAssociateName(),
+                    associateId, associateEmail, associateName,
                     AssociateConstantStatus.SUSPEND, associate.getAssociateType());
         }
         else {
@@ -189,8 +195,11 @@ public class AssociateActionServiceImpl implements AssociateActionService {
             associate.setAssociateType(newType);
         }
 
+        String associateEmail = associate.getAssociateEmail();
+        String associateName = associate.getAssociateName();
+
         _associateService.updateAssociate(
-            associate.getAssociateId(), associate.getAssociateName(),
+            associate.getAssociateId(), associateEmail, associateName,
             associate.getAssociateStatus(), associate.getAssociateType());
     }
 
