@@ -5,7 +5,7 @@ import com.associate.benefit.api.exception.BenefitNotFound;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.benefit.model.Benefit;
 import com.associate.benefit.persistence.BenefitPersistence;
-import com.associate.company.service.CompanyDynamicQuery;
+import com.associate.company.util.CompanyDynamicQuery;
 
 import java.util.ArrayList;
 import java.util.List;

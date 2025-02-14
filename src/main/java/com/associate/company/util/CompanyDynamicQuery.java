@@ -1,4 +1,4 @@
-package com.associate.company.service;
+package com.associate.company.util;
 
 import com.associate.support.database.BaseDatabaseEngineer;
 

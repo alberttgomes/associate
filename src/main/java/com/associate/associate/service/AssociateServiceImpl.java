@@ -10,7 +10,7 @@ import com.associate.associate.constants.AssociateConstantType;
 import com.associate.associate.persistence.AssociatePersistence;
 import com.associate.associate.model.Associate;
 import com.associate.company.api.exception.CompanyNotFound;
-import com.associate.company.service.CompanyDynamicQuery;
+import com.associate.company.util.CompanyDynamicQuery;
 
 import java.util.ArrayList;
 import java.util.Date;
