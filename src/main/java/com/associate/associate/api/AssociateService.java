@@ -1,5 +1,6 @@
 package com.associate.associate.api;
 
+import com.associate.address.model.Address;
 import com.associate.associate.api.exception.AssociateAttributeInvalid;
 import com.associate.associate.api.exception.AssociateNotFound;
 import com.associate.company.api.exception.CompanyNotFound;
@@ -13,7 +14,11 @@ import java.util.List;
 public interface AssociateService {
 
     Associate addAssociate(
-            long companyId, String name, String status, String type)
+            long companyId, String name, String status, String type, String email)
+        throws AssociateAttributeInvalid, CompanyNotFound;
+
+    Associate createAssociateWithAddress(
+            Address address, long companyId, String email, String name, String type)
         throws AssociateAttributeInvalid, CompanyNotFound;
 
     void deleteAssociate(long associateId) throws AssociateNotFound;

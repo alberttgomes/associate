@@ -14,8 +14,20 @@ import java.util.Date;
 @Entity
 public class Associate {
 
+    public String getAssociateEmail() {
+        return associateEmail;
+    }
+
+    public void setAssociateEmail(String associateEmail) {
+        this.associateEmail = associateEmail;
+    }
+
     public Long getAssociateId() {
         return associateId;
+    }
+
+    public void setAssociateId(long associateId) {
+        this.associateId = associateId;
     }
 
     public String getAssociateName() {
@@ -69,6 +81,9 @@ public class Associate {
                 "\t type: " + associateType + "\n" +
                "}\n\t";
     }
+
+    @Column(length = 100, unique = true)
+    private String associateEmail;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

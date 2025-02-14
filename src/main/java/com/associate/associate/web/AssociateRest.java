@@ -47,18 +47,19 @@ public class AssociateRest {
     }
 
     @PostMapping("/associate/create-new-associate/")
-    public ResponseEntity<AssociateDto>
+    public ResponseEntity<Associate>
         createAssociate(@RequestBody AssociateDto associateDto) {
 
         Associate associate = _associateService.addAssociate(
                 associateDto.companyId(), associateDto.name(),
-                associateDto.status(), associateDto.type());
+                associateDto.status(), associateDto.type(),
+                associateDto.email());
 
         if (associate == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(associateDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(associate, HttpStatus.CREATED);
     }
 
     @GetMapping("/associate/all-by-company-id/{companyId}")

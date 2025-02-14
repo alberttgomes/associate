@@ -1,5 +1,7 @@
 package com.associate.associate.service;
 
+import com.associate.address.model.Address;
+import com.associate.address.persistence.AddressPersistence;
 import com.associate.associate.api.AssociateService;
 import com.associate.associate.api.exception.AssociateAttributeInvalid;
 import com.associate.associate.api.exception.AssociateNotFound;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Albert Gomes Cabral
@@ -26,25 +29,29 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Autowired
     public AssociateServiceImpl(
-            AssociatePersistence associatePersistence, CompanyDynamicQuery companyDynamicQuery) {
+            AddressPersistence addressPersistence, AssociatePersistence associatePersistence,
+            CompanyDynamicQuery companyDynamicQuery) {
 
+
+        this._addressPersistence = addressPersistence;
         this._associatePersistence = associatePersistence;
         this._companyDynamicQuery = companyDynamicQuery;
     }
 
     @Override
     public Associate addAssociate(
-            long companyId, String name, String status, String type)
+            long companyId, String name, String status, String type, String email)
         throws AssociateAttributeInvalid, CompanyNotFound {
 
         if (!_companyDynamicQuery.hasCompany(companyId))
             throw new CompanyNotFound(
                     "No company found with id %s".formatted(companyId));
 
-        _validate(name, status, type);
+        _validate(email, name, status, type);
 
         Associate associate = new Associate();
 
+        associate.setAssociateEmail(email);
         associate.setAssociateName(name);
         associate.setAssociateStatus(status);
         associate.setAssociateType(type);
@@ -52,6 +59,27 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setCompanyId(companyId);
 
         return _associatePersistence.save(associate);
+    }
+
+    @Transactional
+    @Override
+    public Associate createAssociateWithAddress(
+            Address address, long companyId, String email, String name, String type)
+        throws AssociateAttributeInvalid {
+
+        if (_companyDynamicQuery.hasCompany(companyId)) {
+            Associate associate = addAssociate(
+                    companyId, name, AssociateConstantStatus.APPROVED, type,
+                    email);
+
+            if (associate == null || address == null) return null;
+
+            _addressPersistence.save(address);
+
+            return associate;
+        }
+
+        return null;
     }
 
     @Override
@@ -176,7 +204,7 @@ public class AssociateServiceImpl implements AssociateService {
 
             Associate associateNew = associateOld.get();
 
-            _validate(name, status, type);
+            _validate("", name, status, type);
 
             associateNew.setAssociateName(name);
             associateNew.setAssociateStatus(status);
@@ -190,7 +218,7 @@ public class AssociateServiceImpl implements AssociateService {
 
     }
 
-    private void _validate(String name, String status, String type)
+    private void _validate(String email, String name, String status, String type)
         throws AssociateAttributeInvalid {
 
         try {
@@ -200,7 +228,12 @@ public class AssociateServiceImpl implements AssociateService {
             List<String> typesList =
                     AssociateConstantType.getAssociateConstantsTypeList();
 
-            if (!name.matches("^[A-Za-z]+(?: [A-Za-z]+)*$")) {
+            if (!email.matches(
+                "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                throw new AssociateAttributeInvalid(
+                    "Invalid attribute email %s".formatted(email));
+            }
+            else if (!name.matches("^[A-Za-z]+(?: [A-Za-z]+)*$")) {
                 throw new AssociateAttributeInvalid(
                     "Invalid attribute name %s".formatted(name));
             }
@@ -218,6 +251,8 @@ public class AssociateServiceImpl implements AssociateService {
                     associateAttributeInvalid);
         }
     }
+
+    private final AddressPersistence _addressPersistence;
 
     private final AssociatePersistence _associatePersistence;
 
