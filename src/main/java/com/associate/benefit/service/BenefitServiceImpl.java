@@ -51,6 +51,23 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
+    public List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound {
+        if (_companyDynamicQuery.hasCompany(companyId)) {
+            Iterable<Benefit> iterable =
+                    _benefitPersistence.findAllByCompanyId(companyId);
+
+            List<Benefit> benefits = new ArrayList<>();
+
+            iterable.forEach(benefits::add);
+
+            return benefits;
+        }
+        else throw new CompanyNotFound(
+            "Unable to fetch all Benefits. Company not found with primary key %s"
+                    .formatted(companyId));
+    }
+
+    @Override
     public Benefit fetchBenefitById(long benefitId) throws BenefitNotFound {
         Optional<Benefit> benefitOptional = _benefitPersistence.findById(benefitId);
 

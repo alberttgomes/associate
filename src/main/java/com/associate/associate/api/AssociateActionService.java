@@ -21,7 +21,7 @@ public interface AssociateActionService {
      * @return all benefits by company id
      * @throws BenefitNotFound thrown an exception if an error occurs
      */
-    List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound;
+    List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound;
 
     /**
      * List all benefits that belong the associate id

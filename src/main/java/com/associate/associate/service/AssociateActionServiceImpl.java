@@ -11,7 +11,6 @@ import com.associate.associate.constants.AssociateConstantType;
 import com.associate.associate.model.Associate;
 import com.associate.benefit.model.Benefit;
 import com.associate.notify.model.Notify;
-import com.associate.benefit.persistence.BenefitPersistence;
 import com.associate.notify.persistence.NotifyPersistence;
 
 import java.util.ArrayList;
@@ -28,25 +27,17 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
     @Autowired
     public AssociateActionServiceImpl(
-            AssociateService associateService, BenefitPersistence benefitPersistence,
-            BenefitService benefitService, NotifyPersistence notifyPersistence) {
+            AssociateService associateService, BenefitService benefitService,
+            NotifyPersistence notifyPersistence) {
 
         this._associateService = associateService;
-        this._benefitPersistence = benefitPersistence;
         this._benefitService = benefitService;
         this._notifyPersistence = notifyPersistence;
     }
 
     @Override
-    public List<Benefit> fetchAllBenefits(long companyId) throws BenefitNotFound {
-        Iterable<Benefit> iterable =
-                _benefitPersistence.findAllByCompanyId(companyId);
-
-        List<Benefit> benefits = new ArrayList<>();
-
-        iterable.forEach(benefits::add);
-
-        return benefits;
+    public List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound {
+        return _benefitService.fetchAllBenefits(companyId);
     }
 
     @Override
@@ -204,8 +195,6 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     private final AssociateService _associateService;
-
-    private final BenefitPersistence _benefitPersistence;
 
     private final BenefitService _benefitService;
 

@@ -16,6 +16,8 @@ public interface BenefitService {
             String benefitCategory, long companyId)
         throws CompanyNotFound;
 
+    List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound;
+
     Benefit fetchBenefitById(long benefitId) throws BenefitNotFound;
 
     Benefit fetchBenefitByName(String name) throws BenefitNotFound;
