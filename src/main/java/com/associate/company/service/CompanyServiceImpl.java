@@ -4,7 +4,7 @@ import com.associate.associate.api.AssociateActionService;
 import com.associate.company.api.CompanyService;
 import com.associate.associate.api.exception.AssociateNotFound;
 import com.associate.company.api.exception.CompanyNotFound;
-import com.associate.associate.api.exception.NotifyNotFound;
+import com.associate.notify.exception.NotifyNotFound;
 import com.associate.address.model.Address;
 import com.associate.company.model.Company;
 import com.associate.notify.model.Notify;
