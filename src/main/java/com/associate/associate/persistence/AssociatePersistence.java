@@ -19,7 +19,7 @@ public interface AssociatePersistence extends CrudRepository<Associate, Long> {
 
     Associate findByAssociateIdAndCompanyId(long associateId, long companyId);
 
-    Associate findByAssociateName(String name);
+    Associate findByAssociateEmailOrAssociateName(String email, String name);
 
     List<Associate> findByCompanyId(long companyId);
 

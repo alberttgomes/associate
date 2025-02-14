@@ -32,7 +32,6 @@ public class AssociateServiceImpl implements AssociateService {
             AddressPersistence addressPersistence, AssociatePersistence associatePersistence,
             CompanyDynamicQuery companyDynamicQuery) {
 
-
         this._addressPersistence = addressPersistence;
         this._associatePersistence = associatePersistence;
         this._companyDynamicQuery = companyDynamicQuery;
@@ -40,14 +39,19 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate addAssociate(
-            long companyId, String name, String status, String type, String email)
-        throws AssociateAttributeInvalid, CompanyNotFound {
+            String email, long companyId, String name, String status, String type)
+        throws RuntimeException {
 
         if (!_companyDynamicQuery.hasCompany(companyId))
             throw new CompanyNotFound(
-                    "No company found with id %s".formatted(companyId));
+                "No company found with id %s".formatted(companyId));
 
         _validate(email, name, status, type);
+
+        if (_associatePersistence.findByAssociateEmailOrAssociateName(
+                email, name) != null)
+            throw new RuntimeException(
+                "Duplicate entry to " + email + " or " + name);
 
         Associate associate = new Associate();
 
@@ -69,8 +73,7 @@ public class AssociateServiceImpl implements AssociateService {
 
         if (_companyDynamicQuery.hasCompany(companyId)) {
             Associate associate = addAssociate(
-                    companyId, name, AssociateConstantStatus.APPROVED, type,
-                    email);
+                    email, companyId, name, AssociateConstantStatus.APPROVED, type);
 
             if (associate == null || address == null) return null;
 
@@ -143,7 +146,8 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate fetchAssociateByName(String name) throws AssociateNotFound {
-        return _associatePersistence.findByAssociateName(name);
+        return _associatePersistence.findByAssociateEmailOrAssociateName(
+                name, name);
     }
 
     @Override
