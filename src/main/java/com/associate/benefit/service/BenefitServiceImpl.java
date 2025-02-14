@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,6 +100,37 @@ public class BenefitServiceImpl implements BenefitService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public Benefit updateBenefit(
+            long benefitId, String benefitCategory,String benefitName, String benefitStatus,
+            String benefitResources, long companyId)
+        throws BenefitNotFound {
+
+        if (_companyDynamicQuery.hasCompany(companyId)) return null;
+
+        Benefit benefit = fetchBenefitById(benefitId);
+
+        if (benefit != null) {
+            benefit.setBenefitCategory(benefitCategory);
+            benefit.setBenefitId(benefitId);
+            benefit.setBenefitName(benefitName);
+            benefit.setBenefitStatus(benefitStatus);
+
+            JSONObject jsonObject = new JSONObject(benefitResources);
+
+            if (jsonObject.has("resources")) {
+                benefit.setBenefitResources(benefitResources);
+            }
+
+            benefit.setCompanyId(companyId);
+
+            return _benefitPersistence.save(benefit);
+        }
+        else throw new BenefitNotFound(
+            "Unable to update Benefit. Benefit not found with id %s"
+                    .formatted(benefitId));
     }
 
     private final BenefitPersistence _benefitPersistence;

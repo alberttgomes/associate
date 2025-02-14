@@ -25,4 +25,9 @@ public interface BenefitService {
     List<Benefit> fetchAllBenefitsByAssociateType(
             String associateType, long companyId);
 
+    Benefit updateBenefit(
+            long benefitId, String benefitCategory,String benefitName, String benefitStatus,
+            String benefitResources, long companyId)
+        throws BenefitNotFound;
+
 }
