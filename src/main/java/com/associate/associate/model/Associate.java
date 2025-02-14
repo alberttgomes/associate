@@ -60,7 +60,7 @@ public class Associate {
 
     @Override
     public String toString() {
-        return "Associate: {\n" +
+        return "associate: {\n" +
                     "\t companyId: " + companyId + ", \n" +
                     "\t create-date: " + createDate + ", \n" +
                     "\t id: " + associateId + ", \n" +
