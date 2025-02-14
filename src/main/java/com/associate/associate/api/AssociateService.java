@@ -14,7 +14,7 @@ public interface AssociateService {
 
     Associate addAssociate(
             long companyId, String name, String status, String type)
-    throws AssociateAttributeInvalid, CompanyNotFound;
+        throws AssociateAttributeInvalid, CompanyNotFound;
 
     void deleteAssociate(long associateId) throws AssociateNotFound;
 
@@ -32,8 +32,8 @@ public interface AssociateService {
 
     List<Associate> fetchAllAssociates();
 
-    List<Associate> fetchAllAssociatesByCompanyId(
-            long companyId) throws CompanyNotFound;
+    List<Associate> fetchAllAssociatesByCompanyId
+            (long companyId) throws CompanyNotFound;
 
     List<Associate> getAssociatesByStatus(
             long companyId, String status) throws CompanyNotFound;

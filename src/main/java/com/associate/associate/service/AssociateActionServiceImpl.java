@@ -65,7 +65,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public Benefit fetchBenefit(long associateId, long benefitId, long companyId)
+    public Benefit findBenefit(long associateId, long benefitId, long companyId)
         throws AssociateNotFound, BenefitNotFound {
 
         if (_associateService.hasAssociateById(associateId, companyId)) {
@@ -77,7 +77,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public List<Notify> getNotifiesByAssociateId(long associateId, long companyId)
+    public List<Notify> findNotifiesByAssociateId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound {
 
         if (!_associateService.hasAssociateById(associateId, companyId)) {

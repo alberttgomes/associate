@@ -3,11 +3,11 @@ package com.associate.associate.service;
 import com.associate.associate.api.AssociateService;
 import com.associate.associate.api.exception.AssociateAttributeInvalid;
 import com.associate.associate.api.exception.AssociateNotFound;
-import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.associate.constants.AssociateConstantStatus;
 import com.associate.associate.constants.AssociateConstantType;
 import com.associate.associate.persistence.AssociatePersistence;
 import com.associate.associate.model.Associate;
+import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.company.service.CompanyDynamicQuery;
 
 import java.util.ArrayList;

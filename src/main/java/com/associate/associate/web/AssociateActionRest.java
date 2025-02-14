@@ -41,7 +41,7 @@ public class AssociateActionRest {
 
         if (benefits.isEmpty()) {
             return new ResponseEntity<>(
-                    new ArrayList<>(), HttpStatus.NO_CONTENT);
+                new ArrayList<>(), HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(benefits, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class AssociateActionRest {
         getAllNotifies(@PathVariable long associateId, @PathVariable long companyId) {
 
         List<Notify> notifies =
-                _associateActionService.getNotifiesByAssociateId(
+                _associateActionService.findNotifiesByAssociateId(
                         associateId, companyId);
 
         if (notifies.isEmpty()) {
