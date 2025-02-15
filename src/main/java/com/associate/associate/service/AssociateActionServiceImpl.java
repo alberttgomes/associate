@@ -1,15 +1,15 @@
 package com.associate.associate.service;
 
 import com.associate.associate.api.AssociateActionService;
-import com.associate.associate.api.AssociateService;
-import com.associate.benefit.api.BenefitService;
 import com.associate.associate.api.exception.AssociateNotFound;
-import com.associate.benefit.api.exception.BenefitNotFound;
-import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.associate.constants.AssociateConstantStatus;
 import com.associate.associate.constants.AssociateConstantType;
 import com.associate.associate.model.Associate;
+import com.associate.associate.api.AssociateService;
+import com.associate.benefit.api.BenefitService;
+import com.associate.benefit.api.exception.BenefitNotFound;
 import com.associate.benefit.model.Benefit;
+import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.notify.model.Notify;
 import com.associate.notify.persistence.NotifyPersistence;
 
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AssociateActionServiceImpl implements AssociateActionService {
-
     @Autowired
     public AssociateActionServiceImpl(
             AssociateService associateService, BenefitService benefitService,
@@ -34,6 +33,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         this._benefitService = benefitService;
         this._notifyPersistence = notifyPersistence;
     }
+
 
     @Override
     public List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound {
