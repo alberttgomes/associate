@@ -11,6 +11,8 @@ import com.associate.associate.persistence.AssociatePersistence;
 import com.associate.associate.model.Associate;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.company.util.CompanyDynamicQuery;
+import com.associate.notify.model.Notify;
+import com.associate.notify.persistence.NotifyPersistence;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,10 +32,11 @@ public class AssociateServiceImpl implements AssociateService {
     @Autowired
     public AssociateServiceImpl(
             AddressPersistence addressPersistence, AssociatePersistence associatePersistence,
-            CompanyDynamicQuery companyDynamicQuery) {
+            CompanyDynamicQuery companyDynamicQuery, NotifyPersistence notifyPersistence) {
 
         this._addressPersistence = addressPersistence;
         this._associatePersistence = associatePersistence;
+        this._notifyPersistence = notifyPersistence;
         this._companyDynamicQuery = companyDynamicQuery;
     }
 
@@ -63,6 +66,42 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setCompanyId(companyId);
 
         return _associatePersistence.save(associate);
+    }
+
+    @Transactional
+    public Associate createAssociateWorkflow(
+            long companyId, String email, boolean needsWorkflowApprove, String name,
+            String type) {
+
+        if (needsWorkflowApprove) {
+            Associate associate = addAssociate(
+                email, companyId, name, AssociateConstantStatus.PENDING, type);
+
+            if (associate != null) {
+                Notify notify = new Notify();
+
+                notify.setCompanyId(companyId);
+                notify.setCreateDate(new Date());
+                notify.setNotifyBody(
+                        "As an owner of system you can need this request to be done.");
+                notify.setNotifyHeader("Workflow approved");
+                notify.setNotifySent(associate.getAssociateEmail());
+                notify.setNotifyTitle("Workflow approved");
+                notify.setReceiver(companyId);
+
+                _notifyPersistence.save(notify);
+
+                return associate;
+            }
+
+            return null;
+        }
+
+        System.out.println(
+            "A new associate was added, but anything workflow process was sent.");
+
+        return addAssociate(
+            email, companyId, name, AssociateConstantStatus.PENDING, type);
     }
 
     @Transactional
@@ -264,5 +303,7 @@ public class AssociateServiceImpl implements AssociateService {
     private final AssociatePersistence _associatePersistence;
 
     private final CompanyDynamicQuery _companyDynamicQuery;
+
+    private final NotifyPersistence _notifyPersistence;
 
 }

@@ -15,11 +15,15 @@ public interface AssociateService {
 
     Associate addAssociate(
             String email, long companyId, String name, String status, String type)
-            throws RuntimeException;
+        throws RuntimeException;
 
     Associate createAssociateWithAddress(
             Address address, long companyId, String email, String name, String type)
         throws AssociateAttributeInvalid, CompanyNotFound;
+
+    Associate createAssociateWorkflow(
+            long companyId, String email, boolean needsWorkflowApprove, String name,
+            String type);
 
     void deleteAssociate(long associateId) throws AssociateNotFound;
 

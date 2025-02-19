@@ -85,7 +85,7 @@ public class AssociateRest {
         }
 
         Associate associate = _associateService.updateAssociate(
-                associateId, associateDto.name(),
+                associateId, associateDto.email(), associateDto.name(),
                 associateDto.status(), associateDto.type());
 
         if (associate != null) {
