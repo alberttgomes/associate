@@ -58,7 +58,7 @@ public interface AssociateActionService {
      * @throws AssociateNotFound an exception occurs if the associate not found
      * @throws CompanyNotFound an exception occurs if the company not found
      */
-    List<Notify> findNotifiesByAssociateId(long associateId, long companyId)
+    List<Notify> findNotifiesByReceiverId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound;
 
     /**

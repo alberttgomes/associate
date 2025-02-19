@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AssociateActionServiceImpl implements AssociateActionService {
+
     @Autowired
     public AssociateActionServiceImpl(
             AssociateService associateService, BenefitService benefitService,
@@ -42,7 +43,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
     @Override
     public List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
-            throws AssociateNotFound, CompanyNotFound {
+        throws AssociateNotFound, CompanyNotFound {
 
         Associate associate =
                 _associateService.fetchAssociateById(associateId);
@@ -68,7 +69,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public List<Notify> findNotifiesByAssociateId(long associateId, long companyId)
+    public List<Notify> findNotifiesByReceiverId(long associateId, long companyId)
         throws AssociateNotFound, CompanyNotFound {
 
         if (!_associateService.hasAssociateById(associateId, companyId)) {

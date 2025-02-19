@@ -52,7 +52,7 @@ public class AssociateActionRest {
         getAllNotifies(@PathVariable long associateId, @PathVariable long companyId) {
 
         List<Notify> notifies =
-                _associateActionService.findNotifiesByAssociateId(
+                _associateActionService.findNotifiesByReceiverId(
                         associateId, companyId);
 
         if (notifies.isEmpty()) {
