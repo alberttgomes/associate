@@ -1,4 +1,62 @@
 {
+  "black": {
+    "benefit": [
+      {
+        "name": "Black Platinum",
+        "status": "approved",
+        "resources": {
+          "discount": {
+            "delivery": "70%",
+            "material": "70%",
+            "travel": "75%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+              "includes": "true",
+              "percentage": "100%"
+            },
+            "company-meets": {
+              "if-you-will-talk": "true",
+              "if-you-will-see": "true"
+            }
+          },
+          "health": {
+            "dentist": "true",
+            "life": "true"
+          }
+        }
+      },
+      {
+        "name": "Black Gold",
+        "status": "approved",
+        "resources": {
+          "discount": {
+            "delivery": "100%",
+            "material": "100%",
+            "travel": "100%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+              "includes": "true",
+              "percentage": "100%"
+            },
+            "company-meets": {
+              "if-you-will-talk": "true",
+              "if-you-will-see": "true"
+            }
+          },
+          "health": {
+            "dentist": "true",
+            "life": "true"
+          }
+        }
+      }
+    ]
+  },
   "bronze": {
       "benefit": [
         {
