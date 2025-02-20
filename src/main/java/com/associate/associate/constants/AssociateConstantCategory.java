@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author Albert Gomes Cabral
  */
-public class AssociateConstantType {
+public class AssociateConstantCategory {
 
     public static final String BLACK = "black";
 
@@ -20,7 +20,7 @@ public class AssociateConstantType {
     public static final String SILVER = "silver";
 
     public static List<String> getAssociateConstantsTypeList() {
-        return List.of(BRONZE, GOLD, SILVER);
+        return List.of(BLACK, BRONZE, GOLD, SILVER);
     }
 
 }

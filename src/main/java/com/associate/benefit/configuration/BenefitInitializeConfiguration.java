@@ -1,7 +1,7 @@
 package com.associate.benefit.configuration;
 
 import com.associate.benefit.api.BenefitService;
-import com.associate.associate.constants.AssociateConstantType;
+import com.associate.associate.constants.AssociateConstantCategory;
 import com.associate.benefit.model.Benefit;
 import com.associate.company.model.Company;
 
@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Albert Gomes Cabral
+ * // This class must be used just in dev environment to test
+ * // the benefitions rules during development phase
  */
 @Configuration
 public class BenefitInitializeConfiguration {
@@ -39,10 +41,10 @@ public class BenefitInitializeConfiguration {
         Map<String, List<Benefit>> benefitsMap = new HashMap<>();
 
         for (String type :
-                AssociateConstantType.getAssociateConstantsTypeList()) {
+                AssociateConstantCategory.getAssociateConstantsTypeList()) {
 
             List<Benefit> benefits =
-                    _readBenefitFromJson(_company.getCompanyId(), type);
+                    _readBenefitsJSON(_company.getCompanyId(), type);
 
             benefitsMap.put(type, benefits);
         }
@@ -85,14 +87,14 @@ public class BenefitInitializeConfiguration {
         }
         else {
             throw new RuntimeException(
-                    "Unable to parse benefit json content");
+                "Unable to parse benefit json content");
         }
 
         return benefits;
     }
 
-    private List<Benefit> _readBenefitFromJson(long companyId, String type) {
-        if (!AssociateConstantType.getAssociateConstantsTypeList().contains(type)) {
+    private List<Benefit> _readBenefitsJSON(long companyId, String type) {
+        if (!AssociateConstantCategory.getAssociateConstantsTypeList().contains(type)) {
             return new ArrayList<>(0);
         }
 
@@ -162,6 +164,5 @@ public class BenefitInitializeConfiguration {
         private final long _timestamp;
 
     }
-
 
 }

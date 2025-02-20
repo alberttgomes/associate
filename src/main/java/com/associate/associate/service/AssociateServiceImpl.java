@@ -6,7 +6,7 @@ import com.associate.associate.api.AssociateService;
 import com.associate.associate.api.exception.AssociateAttributeInvalid;
 import com.associate.associate.api.exception.AssociateNotFound;
 import com.associate.associate.constants.AssociateConstantStatus;
-import com.associate.associate.constants.AssociateConstantType;
+import com.associate.associate.constants.AssociateConstantCategory;
 import com.associate.associate.persistence.AssociatePersistence;
 import com.associate.associate.model.Associate;
 import com.associate.company.api.exception.CompanyNotFound;
@@ -61,7 +61,7 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setAssociateEmail(email);
         associate.setAssociateName(name);
         associate.setAssociateStatus(status);
-        associate.setAssociateType(type);
+        associate.setAssociateCategory(type);
         associate.setCreateDate(new Date());
         associate.setCompanyId(companyId);
 
@@ -254,7 +254,7 @@ public class AssociateServiceImpl implements AssociateService {
             associateNew.setAssociateId(associatedId);
             associateNew.setAssociateName(name);
             associateNew.setAssociateStatus(status);
-            associateNew.setAssociateType(type);
+            associateNew.setAssociateCategory(type);
 
             return _associatePersistence.save(associateNew);
         }
@@ -272,7 +272,7 @@ public class AssociateServiceImpl implements AssociateService {
                     AssociateConstantStatus.getAvailableStatusList();
 
             List<String> typesList =
-                    AssociateConstantType.getAssociateConstantsTypeList();
+                    AssociateConstantCategory.getAssociateConstantsTypeList();
 
             if (!email.matches(
                 "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {

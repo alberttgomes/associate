@@ -5,7 +5,7 @@ import com.associate.company.api.CompanyService;
 
 import com.associate.associate.api.exception.AssociateAttributeInvalid;
 import com.associate.associate.constants.AssociateConstantStatus;
-import com.associate.associate.constants.AssociateConstantType;
+import com.associate.associate.constants.AssociateConstantCategory;
 import com.associate.associate.model.Associate;
 import com.associate.company.model.Company;
 
@@ -34,7 +34,7 @@ class AssociateApplicationTests {
         Associate associate = _associateService.addAssociate(
                 "albert.gomes@gmail.com", _company.getCompanyId(),
                 "Albert Gomes Cabral", AssociateConstantStatus.APPROVED,
-                AssociateConstantType.GOLD);
+                AssociateConstantCategory.GOLD);
 
         Assert.notNull(
             associate, "testAddNewAssociateWithValidCompany passed.");
@@ -47,7 +47,7 @@ class AssociateApplicationTests {
                 () -> _associateService.addAssociate(
                         "albert.gomes@gmail.com", _company.getCompanyId(),
                         "Miguel Garza", "unknown",
-                        AssociateConstantType.GOLD));
+                        AssociateConstantCategory.GOLD));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
@@ -61,7 +61,7 @@ class AssociateApplicationTests {
                 () -> _associateService.addAssociate(
                         "albert.gomes@gmail.com", _company.getCompanyId(),
                         "1234MyNameIs@#1", AssociateConstantStatus.APPROVED,
-                        AssociateConstantType.GOLD));
+                        AssociateConstantCategory.GOLD));
     }
 
     @BeforeAll

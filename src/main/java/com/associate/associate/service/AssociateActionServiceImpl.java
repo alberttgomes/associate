@@ -3,7 +3,7 @@ package com.associate.associate.service;
 import com.associate.associate.api.AssociateActionService;
 import com.associate.associate.api.exception.AssociateNotFound;
 import com.associate.associate.constants.AssociateConstantStatus;
-import com.associate.associate.constants.AssociateConstantType;
+import com.associate.associate.constants.AssociateConstantCategory;
 import com.associate.associate.model.Associate;
 import com.associate.associate.api.AssociateService;
 import com.associate.benefit.api.BenefitService;
@@ -53,7 +53,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         }
 
         return _benefitService.fetchAllBenefitsByAssociateType(
-                associate.getAssociateType(), companyId);
+                associate.getAssociateCategory(), companyId);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         }
 
         if (status.equals(AssociateConstantStatus.APPROVED) &&
-                AssociateConstantType.getAssociateConstantsTypeList().contains(type)) {
+                AssociateConstantCategory.getAssociateConstantsTypeList().contains(type)) {
 
             String associateEmail = associate.getAssociateEmail();
             String associateName = associate.getAssociateName();
@@ -157,7 +157,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
                         .formatted(associateId));
         }
 
-        String type = associate.getAssociateType();
+        String type = associate.getAssociateCategory();
 
         if (type.equals(AssociateConstantStatus.APPROVED)) {
             String associateEmail = associate.getAssociateEmail();
@@ -165,7 +165,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
             _associateService.updateAssociate(
                     associateId, associateEmail, associateName,
-                    AssociateConstantStatus.SUSPEND, associate.getAssociateType());
+                    AssociateConstantStatus.SUSPEND, associate.getAssociateCategory());
         }
         else {
             System.out.printf(
@@ -180,7 +180,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
             long associateId, String oldType, String newType)
         throws AssociateNotFound {
 
-        if (!AssociateConstantType.getAssociateConstantsTypeList().contains(newType)) {
+        if (!AssociateConstantCategory.getAssociateConstantsTypeList().contains(newType)) {
             return;
         }
 
@@ -192,8 +192,8 @@ public class AssociateActionServiceImpl implements AssociateActionService {
                         associateId));
         }
 
-        if (associate.getAssociateType().equals(oldType)) {
-            associate.setAssociateType(newType);
+        if (associate.getAssociateCategory().equals(oldType)) {
+            associate.setAssociateCategory(newType);
         }
 
         String associateEmail = associate.getAssociateEmail();
@@ -201,7 +201,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         _associateService.updateAssociate(
             associate.getAssociateId(), associateEmail, associateName,
-            associate.getAssociateStatus(), associate.getAssociateType());
+            associate.getAssociateStatus(), associate.getAssociateCategory());
     }
 
     private final AssociateService _associateService;

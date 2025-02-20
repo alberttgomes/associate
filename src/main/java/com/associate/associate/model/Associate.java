@@ -46,12 +46,12 @@ public class Associate {
         this.associateStatus = associateStatus;
     }
 
-    public String getAssociateType() {
-        return associateType;
+    public String getAssociateCategory() {
+        return associateCategory;
     }
 
-    public void setAssociateType(String associateType) {
-        this.associateType = associateType;
+    public void setAssociateCategory(String associateType) {
+        this.associateCategory = associateType;
     }
 
     public long getCompanyId() {
@@ -78,7 +78,7 @@ public class Associate {
                 "\t id: " + associateId + ", \n" +
                 "\t name: " + associateName + ", \n" +
                 "\t status: " + associateStatus + ", \n" +
-                "\t type: " + associateType + "\n" +
+                "\t type: " + associateCategory + "\n" +
                "}\n\t";
     }
 
@@ -96,7 +96,7 @@ public class Associate {
     private String associateStatus;
 
     @Column(length = 25, nullable = false)
-    private String associateType;
+    private String associateCategory;
 
     @Column(length = 100, nullable = false)
     private long companyId;
