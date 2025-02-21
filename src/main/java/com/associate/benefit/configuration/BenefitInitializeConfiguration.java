@@ -22,8 +22,6 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Albert Gomes Cabral
- * // This class must be used just in dev environment to test
- * // the benefitions rules during development phase
  */
 @Configuration
 public class BenefitInitializeConfiguration {
@@ -72,14 +70,12 @@ public class BenefitInitializeConfiguration {
 
                 JSONObject resourcesObject = benefitObject.optJSONObject("resources");
 
-                Benefit benefit = null;
+                Benefit benefit = _benefitService.fetchBenefitByName(benefitName);
 
-                String resources = resourcesObject.optString("resources", "N/A");
-
-                if (_benefitService.fetchBenefitByName(benefitName) == null) {
-                    benefit = _benefitService.addBenefit(
-                            benefitName, benefitStatus, resources, type,
-                            companyId);
+                if (benefit == null) {
+                    benefit = _benefitService.createBenefitAndMetaData(
+                            type, benefitName, benefitStatus, companyId,
+                            resourcesObject.toString());
                 }
 
                 benefits.add(benefit);
