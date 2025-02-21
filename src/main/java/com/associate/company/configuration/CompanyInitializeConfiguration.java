@@ -49,7 +49,7 @@ public class CompanyInitializeConfiguration {
                         companyEmail, companyName);
             }
 
-            return  _companyService.addCompany(
+            return _companyService.addCompany(
                 0L, companyEmail, companyName, companyPhone);
         }
         catch (Exception exception) {

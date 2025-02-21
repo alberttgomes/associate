@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * @author Albert Gomes Cabral
  */
-public abstract class BaseDatabaseEngineer {
+public abstract class BaseDatabaseSupport {
 
     protected Connection getConnection() {
         ClassLoader classLoader = getClass().getClassLoader();

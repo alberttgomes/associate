@@ -289,7 +289,7 @@ public class AssociateServiceImpl implements AssociateService {
             }
             else if (!typesList.contains(type)) {
                 throw new AssociateAttributeInvalid(
-                    "Invalid attribute type %s".formatted(type));
+                    "Invalid attribute category %s".formatted(type));
             }
         }
         catch (AssociateAttributeInvalid associateAttributeInvalid) {

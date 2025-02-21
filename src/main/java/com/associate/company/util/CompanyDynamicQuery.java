@@ -1,6 +1,6 @@
 package com.associate.company.util;
 
-import com.associate.support.database.BaseDatabaseEngineer;
+import com.associate.support.database.BaseDatabaseSupport;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author Albert Gomes Cabral
  */
 @Component
-public class CompanyDynamicQuery extends BaseDatabaseEngineer {
+public class CompanyDynamicQuery extends BaseDatabaseSupport {
 
     public boolean hasCompany(long companyId) {
         String query = "select count(*) from company where company_id = ?";
