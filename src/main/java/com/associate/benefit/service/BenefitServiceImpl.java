@@ -2,18 +2,23 @@ package com.associate.benefit.service;
 
 import com.associate.benefit.api.BenefitService;
 import com.associate.benefit.api.exception.BenefitNotFound;
+import com.associate.benefit.model.BenefitResources;
+import com.associate.benefit.persistence.BenefitResourcesPersistence;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.benefit.model.Benefit;
 import com.associate.benefit.persistence.BenefitPersistence;
 import com.associate.company.util.CompanyDynamicQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Albert Gomes Cabral
@@ -23,8 +28,11 @@ public class BenefitServiceImpl implements BenefitService {
 
     @Autowired
     public BenefitServiceImpl(
-            BenefitPersistence benefitPersistence, CompanyDynamicQuery companyDynamicQuery) {
+            BenefitPersistence benefitPersistence,
+            BenefitResourcesPersistence benefitResourcesPersistence,
+            CompanyDynamicQuery companyDynamicQuery) {
 
+        this._benefitResourcesPersistence = benefitResourcesPersistence;
         this._benefitPersistence = benefitPersistence;
         this._companyDynamicQuery = companyDynamicQuery;
     }
@@ -42,13 +50,47 @@ public class BenefitServiceImpl implements BenefitService {
             benefit.setBenefitStatus(benefitStatus);
             benefit.setBenefitResources(benefitResources);
             benefit.setBenefitCategory(benefitCategory);
+            benefit.setCreateDate(new Date());
             benefit.setCompanyId(companyId);
+            benefit.setModifierDate(new Date());
 
             return _benefitPersistence.save(benefit);
         }
         else throw new CompanyNotFound(
             "Unable to create Benefit. Company not found with primary key %s"
                     .formatted(companyId));
+    }
+
+    @Transactional
+    @Override
+    public Benefit createBenefitAndMetaData(
+            String benefitCategory, String benefitName, String benefitStatus,
+            long companyId, String metaDataResources)
+        throws CompanyNotFound {
+
+        try {
+            Benefit benefit = addBenefit(
+                benefitName, benefitStatus, metaDataResources,
+                benefitCategory, companyId);
+
+            String metaData = benefit.getBenefitResources();
+
+            if (!metaData.isEmpty() && !metaData.isBlank()) {
+                BenefitResources benefitResources = new BenefitResources();
+
+                benefitResources.setBenefitId(benefit.getBenefitId());
+                benefitResources.setBenefitName(benefitName);
+                benefitResources.setCreateDate(new Date());
+                benefitResources.setMetaData(metaData);
+
+                _benefitResourcesPersistence.save(benefitResources);
+            }
+
+            return benefit;
+        }
+        catch (RuntimeException runtimeException) {
+            throw new RuntimeException(runtimeException);
+        }
     }
 
     @Override
@@ -78,6 +120,27 @@ public class BenefitServiceImpl implements BenefitService {
     @Override
     public Benefit fetchBenefitByName(String name) throws BenefitNotFound {
         return _benefitPersistence.findByBenefitName(name);
+    }
+
+    @Override
+    public BenefitResources fetchBenefitResources(long benefitId) throws BenefitNotFound {
+        try {
+            Benefit benefit = fetchBenefitById(benefitId);
+
+            if (benefit == null) {
+                throw new BenefitNotFound(
+                    "Unable to get resources for benefit with primary key %s"
+                            .formatted(benefitId));
+            }
+
+            List<BenefitResources> benefitResources =
+                    _benefitResourcesPersistence.findByBenefitId(benefitId);
+
+            return benefitResources.getFirst();
+        }
+        catch (RuntimeException runtimeException) {
+            throw new BenefitNotFound(runtimeException.getMessage());
+        }
     }
 
     @Override
@@ -117,6 +180,7 @@ public class BenefitServiceImpl implements BenefitService {
             benefit.setBenefitId(benefitId);
             benefit.setBenefitName(benefitName);
             benefit.setBenefitStatus(benefitStatus);
+            benefit.setModifierDate(new Date());
 
             JSONObject jsonObject = new JSONObject(benefitResources);
 
@@ -129,11 +193,13 @@ public class BenefitServiceImpl implements BenefitService {
             return _benefitPersistence.save(benefit);
         }
         else throw new BenefitNotFound(
-            "Unable to update Benefit. Benefit not found with id %s"
+            "Unable to updateNotify Benefit. Benefit not found with id %s"
                     .formatted(benefitId));
     }
 
     private final BenefitPersistence _benefitPersistence;
+
+    private final BenefitResourcesPersistence _benefitResourcesPersistence;
 
     private final CompanyDynamicQuery _companyDynamicQuery;
 
