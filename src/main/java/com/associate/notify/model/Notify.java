@@ -42,7 +42,7 @@ public class Notify {
         this.notifyBody = body;
     }
 
-    public String getNotifyHeader(String header) {
+    public String getNotifyHeader() {
         return notifyHeader;
     }
 
