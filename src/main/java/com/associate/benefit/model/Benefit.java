@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Date;
+
 /**
  * @author Albert Gomes Cabral
  */
@@ -44,6 +46,14 @@ public class Benefit {
         this.benefitStatus = benefitStatus;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     public String getBenefitResources() {
         return benefitResources;
     }
@@ -58,6 +68,14 @@ public class Benefit {
 
     public void setCompanyId(long companyId) {
         this.companyId = companyId;
+    }
+
+    public Date getModifierDate() {
+        return modifierDate;
+    }
+
+    public void setModifierDate(Date lastUpdateDate) {
+        this.modifierDate = lastUpdateDate;
     }
 
     @Id
@@ -77,6 +95,12 @@ public class Benefit {
     private String benefitResources;
 
     @Column(nullable = false)
+    private Date createDate;
+
+    @Column(nullable = false)
     private long companyId;
+
+    @Column(nullable = false)
+    private Date modifierDate;
 
 }
