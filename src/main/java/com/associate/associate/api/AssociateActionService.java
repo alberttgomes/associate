@@ -92,7 +92,7 @@ public interface AssociateActionService {
 
     /**
      * Reactive deactivated or suspended associates.
-     * Can be possible update the associate's type
+     * Can be possible updateNotify the associate's type
      *
      * @param associateId see @Associate
      * @param status must be updated to approved
@@ -115,6 +115,16 @@ public interface AssociateActionService {
         throws AssociateNotFound;
 
     /**
+     * Remove an associate deleting from system's data and notify the company
+     * that associate was shutdown.
+     *
+     * @param associateId see @Associate entity
+     * @param companyId see @Company entity
+     * @throws AssociateNotFound an exception occurs if the associate not found
+     */
+    void shutdown(long associateId, long companyId) throws AssociateNotFound;
+
+    /**
      * Update associate type checking if associate old type is correctly, and
      * if exists an associate with gave associate id
      *
@@ -123,7 +133,7 @@ public interface AssociateActionService {
      * @param newType new associate's type to replaced
      * @throws AssociateNotFound an exceptions occurs if associate not found
      */
-    void updateAssociateType(
+    void updateAssociateCategory(
             long associateId, String oldType, String newType) throws AssociateNotFound;
 
 }

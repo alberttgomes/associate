@@ -12,8 +12,10 @@ import com.associate.benefit.model.Benefit;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.notify.model.Notify;
 import com.associate.notify.persistence.NotifyPersistence;
+import com.associate.notify.util.NotifySubject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,12 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     @Autowired
     public AssociateActionServiceImpl(
             AssociateService associateService, BenefitService benefitService,
-            NotifyPersistence notifyPersistence) {
+            NotifyPersistence notifyPersistence, NotifySubject notifySubject) {
 
         this._associateService = associateService;
         this._benefitService = benefitService;
         this._notifyPersistence = notifyPersistence;
+        this._notifySubject = notifySubject;
     }
 
 
@@ -111,18 +114,23 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         Notify notify = new Notify();
 
         notify.setCompanyId(companyId);
+        notify.setCreateDate(new Date());
         notify.setNotifyBody(notifyBody);
         notify.setNotifyHeader(notifyHeader);
-        notify.setNotifyTitle(associateSent.getAssociateName());
+        notify.setNotifySent(associateSent.getAssociateName());
         notify.setNotifyTitle(notifyTitle);
         notify.setReceiver(receiver);
 
-        return _notifyPersistence.save(notify);
+        notify = _notifyPersistence.save(notify);
+
+        _notifySubject.notifyObservers(notify);
+
+        return notify;
     }
 
     @Override
     public Associate reactivePlanAssociate(
-            long associateId, String status, String type) throws AssociateNotFound {
+        long associateId, String status, String type) throws AssociateNotFound {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
 
@@ -146,6 +154,37 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
+    public void shutdown(
+        long associateId, long companyId) throws AssociateNotFound {
+
+        try {
+            Associate associate = _associateService.fetchAssociateByCompanyId(
+                    associateId, companyId);
+
+            if (associate == null) {
+                throw new AssociateNotFound(
+                    "Unable to shutdown associate. Associate not found with id %s"
+                            .formatted(associateId + " " + companyId));
+            }
+
+            String notifyBody = "request to leave of membership " +
+                    associate.getAssociateName();
+
+            notifyAssociate(
+                associateId, companyId, notifyBody,
+                "request to leave",
+                "request to leave", companyId);
+
+            _associateService.deleteAssociate(associateId);
+
+            _notifySubject.removeObserver(associate);
+        }
+        catch (AssociateNotFound associateNotFound) {
+            throw new AssociateNotFound(associateNotFound);
+        }
+    }
+
+    @Override
     public String suspendPlanAssociate(
             long associateId, String reason) throws AssociateNotFound {
 
@@ -153,7 +192,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         if (associate == null) {
             throw new AssociateNotFound(
-                "Unable to update type. Associate not found with id %s"
+                "Unable to updateNotify type. Associate not found with id %s"
                         .formatted(associateId));
         }
 
@@ -176,7 +215,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public void updateAssociateType(
+    public void updateAssociateCategory(
             long associateId, String oldType, String newType)
         throws AssociateNotFound {
 
@@ -188,7 +227,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         if (associate == null) {
             throw new AssociateNotFound(
-                "Unable to update associate plan. Associate not found with id %s".formatted(
+                "Unable to updateNotify associate plan. Associate not found with id %s".formatted(
                         associateId));
         }
 
@@ -209,5 +248,7 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     private final BenefitService _benefitService;
 
     private final NotifyPersistence _notifyPersistence;
+
+    private final NotifySubject _notifySubject;
 
 }
