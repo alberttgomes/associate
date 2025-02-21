@@ -2,6 +2,33 @@
   "black": {
     "benefit": [
       {
+        "name": "Black",
+        "status": "approved",
+        "resources": {
+          "discount": {
+            "delivery": "60%",
+            "material": "60%",
+            "travel": "65%,",
+            "platform": "unlimited"
+          },
+          "events": {
+            "company-areas": "all",
+            "company-out-office": {
+              "includes": "true",
+              "percentage": "65%"
+            },
+            "company-meets": {
+              "if-you-will-talk": "true",
+              "if-you-will-see": "true"
+            }
+          },
+          "health": {
+            "dentist": "true",
+            "life": "false"
+          }
+        }
+      },
+      {
         "name": "Black Platinum",
         "status": "approved",
         "resources": {
