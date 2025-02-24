@@ -123,7 +123,9 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
-    public BenefitResources fetchBenefitResources(long benefitId) throws BenefitNotFound {
+    public BenefitResources fetchBenefitResourcesLatestVersion(long benefitId)
+        throws BenefitNotFound {
+
         try {
             Benefit benefit = fetchBenefitById(benefitId);
 

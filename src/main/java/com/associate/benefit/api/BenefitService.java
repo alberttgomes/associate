@@ -31,7 +31,8 @@ public interface BenefitService {
 
     Benefit fetchBenefitByName(String name) throws BenefitNotFound;
 
-    BenefitResources fetchBenefitResources(long benefitId) throws BenefitNotFound;
+    BenefitResources fetchBenefitResourcesLatestVersion(long benefitId)
+        throws BenefitNotFound;
 
     Benefit updateBenefit(
             long benefitId, String benefitCategory,String benefitName, String benefitStatus,
