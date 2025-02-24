@@ -42,7 +42,8 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate addAssociate(
-            String email, long companyId, String name, String status, String type)
+            String email, long companyId, String name, String phoneNumber,
+            String status, String type)
         throws RuntimeException {
 
         if (!_companyDynamicQuery.hasCompany(companyId))
@@ -60,22 +61,25 @@ public class AssociateServiceImpl implements AssociateService {
 
         associate.setAssociateEmail(email);
         associate.setAssociateName(name);
+        associate.setAssociatePhoneNumber(phoneNumber);
         associate.setAssociateStatus(status);
         associate.setAssociateCategory(type);
         associate.setCreateDate(new Date());
         associate.setCompanyId(companyId);
+        associate.setModifiedDate(new Date());
 
         return _associatePersistence.save(associate);
     }
 
     @Transactional
     public Associate createAssociateWorkflow(
-            long companyId, String email, boolean needsWorkflowApprove, String name,
-            String type) {
+        long companyId, String email, boolean needsWorkflowApprove,
+        String name, String phoneNumber, String type) {
 
         if (needsWorkflowApprove) {
             Associate associate = addAssociate(
-                email, companyId, name, AssociateConstantStatus.PENDING, type);
+                email, companyId, name, phoneNumber, AssociateConstantStatus.PENDING,
+                type);
 
             if (associate != null) {
                 Notify notify = new Notify();
@@ -83,36 +87,37 @@ public class AssociateServiceImpl implements AssociateService {
                 notify.setCompanyId(companyId);
                 notify.setCreateDate(new Date());
                 notify.setNotifyBody(
-                        "As an owner of system you can need this request to be done.");
+                    "As an owner of system you can need this request to be done.");
                 notify.setNotifyHeader("Workflow approved");
                 notify.setNotifySent(associate.getAssociateEmail());
                 notify.setNotifyTitle("Workflow approved");
                 notify.setReceiver(companyId);
 
                 _notifyPersistence.save(notify);
-
-                return associate;
             }
 
-            return null;
+            return associate;
         }
 
         System.out.println(
             "A new associate was added, but anything workflow process was sent.");
 
         return addAssociate(
-            email, companyId, name, AssociateConstantStatus.PENDING, type);
+            email, companyId, name, phoneNumber, AssociateConstantStatus.PENDING,
+            type);
     }
 
     @Transactional
     @Override
     public Associate createAssociateWithAddress(
-            Address address, long companyId, String email, String name, String type)
+            Address address, long companyId, String email, String name,
+            String phoneNumber, String type)
         throws AssociateAttributeInvalid {
 
         if (_companyDynamicQuery.hasCompany(companyId)) {
             Associate associate = addAssociate(
-                    email, companyId, name, AssociateConstantStatus.APPROVED, type);
+                email, companyId, name, phoneNumber, AssociateConstantStatus.APPROVED,
+                type);
 
             if (associate == null || address == null) return null;
 
@@ -211,8 +216,8 @@ public class AssociateServiceImpl implements AssociateService {
     }
 
     @Override
-    public List<Associate> getAssociatesByStatus(
-            long companyId, String status) throws CompanyNotFound {
+    public List<Associate> getAssociatesByStatus(long companyId, String status)
+        throws CompanyNotFound {
 
         List<Associate> associateList =
                 _associatePersistence.findByCompanyIdAndAssociateStatus(

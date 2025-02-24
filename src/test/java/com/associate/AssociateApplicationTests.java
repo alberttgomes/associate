@@ -33,7 +33,7 @@ class AssociateApplicationTests {
     void testAddNewAssociateWithValidCompany() {
         Associate associate = _associateService.addAssociate(
                 "albert.gomes@gmail.com", _company.getCompanyId(),
-                "Albert Gomes Cabral", AssociateConstantStatus.APPROVED,
+                "Albert Gomes Cabral", "", AssociateConstantStatus.APPROVED,
                 AssociateConstantCategory.GOLD);
 
         Assert.notNull(
@@ -46,21 +46,21 @@ class AssociateApplicationTests {
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
                         "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "Miguel Garza", "unknown",
+                        "Miguel Garza", "","unknown",
                         AssociateConstantCategory.GOLD));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
                         "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "Felipe Silva", AssociateConstantStatus.APPROVED,
+                        "Felipe Silva","", AssociateConstantStatus.APPROVED,
                         "unknown"));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
                         "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "1234MyNameIs@#1", AssociateConstantStatus.APPROVED,
+                        "1234MyNameIs@#1", "", AssociateConstantStatus.APPROVED,
                         AssociateConstantCategory.GOLD));
     }
 

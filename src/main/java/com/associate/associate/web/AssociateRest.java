@@ -48,11 +48,11 @@ public class AssociateRest {
 
     @PostMapping("/associate/create-new-associate/")
     public ResponseEntity<Associate>
-        createAssociate(@RequestBody AssociateDto associateDto) {
+        createAssociate(@RequestBody AssociateDto dto) {
 
         Associate associate = _associateService.addAssociate(
-                associateDto.email(), associateDto.companyId(), associateDto.name(),
-                associateDto.status(), associateDto.type());
+                dto.email(), dto.companyId(), dto.name(), dto.phoneNumber(),
+                dto.status(), dto.type());
 
         if (associate == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

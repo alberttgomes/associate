@@ -14,16 +14,18 @@ import java.util.List;
 public interface AssociateService {
 
     Associate addAssociate(
-            String email, long companyId, String name, String status, String type)
+            String email, long companyId, String name, String phoneNumber,
+            String status, String type)
         throws RuntimeException;
 
     Associate createAssociateWithAddress(
-            Address address, long companyId, String email, String name, String type)
+            Address address, long companyId, String email, String name,
+            String phoneNumber, String type)
         throws AssociateAttributeInvalid, CompanyNotFound;
 
     Associate createAssociateWorkflow(
             long companyId, String email, boolean needsWorkflowApprove, String name,
-            String type);
+            String phoneNumber, String type);
 
     void deleteAssociate(long associateId) throws AssociateNotFound;
 

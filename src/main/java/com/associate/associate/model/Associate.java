@@ -19,6 +19,14 @@ import java.util.List;
 @Entity
 public class Associate implements AssociateObserver {
 
+    public String getAssociateCategory() {
+        return associateCategory;
+    }
+
+    public void setAssociateCategory(String associateType) {
+        this.associateCategory = associateType;
+    }
+
     public String getAssociateEmail() {
         return associateEmail;
     }
@@ -51,12 +59,12 @@ public class Associate implements AssociateObserver {
         this.associateStatus = associateStatus;
     }
 
-    public String getAssociateCategory() {
-        return associateCategory;
+    public String getAssociatePhoneNumber() {
+        return associatePhoneNumber;
     }
 
-    public void setAssociateCategory(String associateType) {
-        this.associateCategory = associateType;
+    public void setAssociatePhoneNumber(String associatePhoneNumber) {
+        this.associatePhoneNumber = associatePhoneNumber;
     }
 
     public long getCompanyId() {
@@ -73,6 +81,14 @@ public class Associate implements AssociateObserver {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     @Override
@@ -92,10 +108,12 @@ public class Associate implements AssociateObserver {
     public String toString() {
         return "associate: {\n" +
                 "\t category: " + associateCategory + "\n" +
-                "\t companyId: " + companyId + ", \n" +
+                "\t company-id: " + companyId + ", \n" +
                 "\t create-date: " + createDate + ", \n" +
                 "\t id: " + associateId + ", \n" +
+                "\t modified-date: " + modifiedDate + ", \n" +
                 "\t name: " + associateName + ", \n" +
+                "\t phone-number: " +associatePhoneNumber + ", \n" +
                 "\t status: " + associateStatus + ", \n" +
                "}\n\t";
     }
@@ -113,6 +131,9 @@ public class Associate implements AssociateObserver {
     @Column(unique=true, length = 100, nullable = false)
     private String associateName;
 
+    @Column(unique = true, length = 25, nullable = false)
+    private String associatePhoneNumber;
+
     @Column(length = 25, nullable = false)
     private String associateStatus;
 
@@ -121,6 +142,9 @@ public class Associate implements AssociateObserver {
 
     @Column(length = 50, nullable = false)
     private Date createDate;
+
+    @Column(length = 50, nullable = false)
+    private Date modifiedDate;
 
     private static final List<Notify> notifies = new ArrayList<>();
 
