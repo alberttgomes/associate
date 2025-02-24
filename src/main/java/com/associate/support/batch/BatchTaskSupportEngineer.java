@@ -1,7 +1,6 @@
 package com.associate.support.batch;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -41,12 +40,19 @@ public class BatchTaskSupportEngineer {
         return companyProperties;
     }
 
-    public static String readContent(String filePath) {
+    public static String readContentByFilePath(String filePath) {
         if (filePath.isEmpty()) {
             return "";
         }
 
-        try (InputStream inputStream = new FileInputStream(filePath)) {
+        ClassLoader classLoader =
+                BatchTaskSupportEngineer.class.getClassLoader();
+
+        try (InputStream inputStream = classLoader.getResourceAsStream(filePath)) {
+            if (inputStream == null) {
+                return "";
+            }
+
             return new String(inputStream.readAllBytes());
         }
         catch (IOException ioException) {
