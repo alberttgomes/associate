@@ -1,4 +1,4 @@
-package com.associate.notify.exception;
+package com.associate.notify.api.exception;
 
 /**
  * @author Albert Gomes Cabral

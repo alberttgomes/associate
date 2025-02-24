@@ -1,7 +1,7 @@
 package com.associate.company.api;
 
 import com.associate.company.api.exception.CompanyNotFound;
-import com.associate.notify.exception.NotifyNotFound;
+import com.associate.notify.api.exception.NotifyNotFound;
 import com.associate.address.model.Address;
 import com.associate.company.model.Company;
 import com.associate.notify.model.Notify;
