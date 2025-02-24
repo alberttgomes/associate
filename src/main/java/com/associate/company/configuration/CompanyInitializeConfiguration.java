@@ -42,21 +42,48 @@ public class CompanyInitializeConfiguration {
             String companyName = companyProperties.get("company.name.props");
             String companyPhone = companyProperties.get("company.phone.props");
 
+            Company company;
+
             if (_companyService.fetchCompanyByEmailOrName(
                     companyEmail, companyName) != null) {
 
-                return _companyService.fetchCompanyByEmailOrName(
+                company = _companyService.fetchCompanyByEmailOrName(
                         companyEmail, companyName);
+
+                _setCompany(company);
+
+                return company;
             }
 
-            return _companyService.addCompany(
+            company =  _companyService.addCompany(
                 0L, companyEmail, companyName, companyPhone);
+
+            _setCompany(company);
+
+            return company;
         }
         catch (Exception exception) {
             throw new Exception(exception);
         }
 
     }
+
+    @Bean
+    public Company company() throws Exception {
+        if (_getCompany() == null) return initCompany();
+
+        return _getCompany();
+    }
+
+    private Company _getCompany() throws Exception {
+        return _company;
+    }
+
+    private void _setCompany(Company company) throws Exception {
+        this._company = company;
+    }
+
+    private Company _company;
 
     private final CompanyService _companyService;
 
