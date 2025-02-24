@@ -38,7 +38,6 @@ public class AssociateActionServiceImpl implements AssociateActionService {
         this._notifySubject = notifySubject;
     }
 
-
     @Override
     public List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound {
         return _benefitService.fetchAllBenefits(companyId);
@@ -108,8 +107,8 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         if (associateSent == null)
             throw new AssociateNotFound(
-                "Unable to take benefits. Associate not found with id %s".formatted(
-                        associateId));
+                "Unable to send notify. Associate not found with id %s"
+                    .formatted(associateId));
 
         Notify notify = new Notify();
 
