@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Albert Gomes Cabral
  */
-@RestController
+@Deprecated
 @CrossOrigin("localhost:8080")
+@RestController
 public class AssociateRest {
 
     @Autowired
@@ -51,8 +52,8 @@ public class AssociateRest {
         createAssociate(@RequestBody AssociateDto dto) {
 
         Associate associate = _associateService.addAssociate(
-                dto.email(), dto.companyId(), dto.name(), dto.phoneNumber(),
-                dto.status(), dto.type());
+                dto.category(), dto.email(), dto.companyId(), dto.name(),
+                dto.phoneNumber(), dto.status());
 
         if (associate == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -85,8 +86,8 @@ public class AssociateRest {
         }
 
         Associate associate = _associateService.updateAssociate(
-                associateId, associateDto.email(), associateDto.name(),
-                associateDto.status(), associateDto.type());
+                associateDto.category(), associateId, associateDto.email(),
+                associateDto.phoneNumber(), associateDto.name(), associateDto.status());
 
         if (associate != null) {
             return new ResponseEntity<>(associate, HttpStatus.OK);

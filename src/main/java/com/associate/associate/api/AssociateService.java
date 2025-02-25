@@ -14,8 +14,8 @@ import java.util.List;
 public interface AssociateService {
 
     Associate addAssociate(
-            String email, long companyId, String name, String phoneNumber,
-            String status, String type)
+            String category, String email, long companyId, String name,
+            String phoneNumber, String status)
         throws RuntimeException;
 
     Associate createAssociateWithAddress(
@@ -52,8 +52,8 @@ public interface AssociateService {
     boolean hasAssociateById(long associateId, long companyId);
 
     Associate updateAssociate(
-            long associatedId, String email, String name, String status,
-            String type)
+            String category, long associatedId, String email, String phoneNumber,
+            String name, String status)
         throws AssociateNotFound;
 
 }

@@ -32,9 +32,9 @@ class AssociateApplicationTests {
     @Test
     void testAddNewAssociateWithValidCompany() {
         Associate associate = _associateService.addAssociate(
-                "albert.gomes@gmail.com", _company.getCompanyId(),
-                "Albert Gomes Cabral", "", AssociateConstantStatus.APPROVED,
-                AssociateConstantCategory.GOLD);
+                AssociateConstantCategory.GOLD, "albert.gomes@gmail.com",
+                _company.getCompanyId(), "Albert Gomes Cabral", "",
+                AssociateConstantStatus.APPROVED);
 
         Assert.notNull(
             associate, "testAddNewAssociateWithValidCompany passed.");
@@ -45,23 +45,22 @@ class AssociateApplicationTests {
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
-                        "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "Miguel Garza", "","unknown",
-                        AssociateConstantCategory.GOLD));
-
-        assertThrows(
-                AssociateAttributeInvalid.class,
-                () -> _associateService.addAssociate(
-                        "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "Felipe Silva","", AssociateConstantStatus.APPROVED,
+                        AssociateConstantCategory.GOLD, "albert.gomes@gmail.com",
+                        _company.getCompanyId(), "Miguel Garza", "",
                         "unknown"));
 
         assertThrows(
                 AssociateAttributeInvalid.class,
                 () -> _associateService.addAssociate(
-                        "albert.gomes@gmail.com", _company.getCompanyId(),
-                        "1234MyNameIs@#1", "", AssociateConstantStatus.APPROVED,
-                        AssociateConstantCategory.GOLD));
+                        "unknown", "albert.gomes@gmail.com", _company.getCompanyId(),
+                        "Felipe Silva","", AssociateConstantStatus.APPROVED));
+
+        assertThrows(
+                AssociateAttributeInvalid.class,
+                () -> _associateService.addAssociate(
+                        AssociateConstantCategory.GOLD, "albert.gomes@gmail.com",
+                        _company.getCompanyId(), "1234MyNameIs@#1", "",
+                        AssociateConstantStatus.APPROVED));
     }
 
     @BeforeAll
@@ -73,7 +72,7 @@ class AssociateApplicationTests {
     private AssociateService _associateService;
 
     @Autowired
-    @Qualifier("initCompany")
+    @Qualifier("company")
     private Company _company;
 
     @Autowired

@@ -42,15 +42,15 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate addAssociate(
-            String email, long companyId, String name, String phoneNumber,
-            String status, String type)
+            String category, String email, long companyId, String name,
+            String phoneNumber, String status)
         throws RuntimeException {
 
         if (!_companyDynamicQuery.hasCompany(companyId))
             throw new CompanyNotFound(
                 "No company found with id %s".formatted(companyId));
 
-        _validate(email, name, status, type);
+        _validate(email, name, status, category);
 
         if (_associatePersistence.findByAssociateEmailOrAssociateName(
                 email, name) != null)
@@ -63,7 +63,7 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setAssociateName(name);
         associate.setAssociatePhoneNumber(phoneNumber);
         associate.setAssociateStatus(status);
-        associate.setAssociateCategory(type);
+        associate.setAssociateCategory(category);
         associate.setCreateDate(new Date());
         associate.setCompanyId(companyId);
         associate.setModifiedDate(new Date());
@@ -74,12 +74,12 @@ public class AssociateServiceImpl implements AssociateService {
     @Transactional
     public Associate createAssociateWorkflow(
         long companyId, String email, boolean needsWorkflowApprove,
-        String name, String phoneNumber, String type) {
+        String name, String phoneNumber, String category) {
 
         if (needsWorkflowApprove) {
             Associate associate = addAssociate(
-                email, companyId, name, phoneNumber, AssociateConstantStatus.PENDING,
-                type);
+                category, email, companyId, name, phoneNumber,
+                AssociateConstantStatus.PENDING);
 
             if (associate != null) {
                 Notify notify = new Notify();
@@ -103,21 +103,21 @@ public class AssociateServiceImpl implements AssociateService {
             "A new associate was added, but anything workflow process was sent.");
 
         return addAssociate(
-            email, companyId, name, phoneNumber, AssociateConstantStatus.PENDING,
-            type);
+                category, email, companyId, name, phoneNumber,
+                AssociateConstantStatus.PENDING);
     }
 
     @Transactional
     @Override
     public Associate createAssociateWithAddress(
             Address address, long companyId, String email, String name,
-            String phoneNumber, String type)
+            String phoneNumber, String category)
         throws AssociateAttributeInvalid {
 
         if (_companyDynamicQuery.hasCompany(companyId)) {
             Associate associate = addAssociate(
-                email, companyId, name, phoneNumber, AssociateConstantStatus.APPROVED,
-                type);
+                category, email, companyId, name, phoneNumber,
+                AssociateConstantStatus.APPROVED);
 
             if (associate == null || address == null) return null;
 
@@ -238,8 +238,8 @@ public class AssociateServiceImpl implements AssociateService {
 
     @Override
     public Associate updateAssociate(
-            long associatedId, String email, String name, String status,
-            String type)
+            String category, long associatedId, String email, String phoneNumber,
+            String name, String status)
         throws AssociateNotFound {
 
         try {
@@ -253,13 +253,15 @@ public class AssociateServiceImpl implements AssociateService {
 
             Associate associateNew = associateOld.get();
 
-            _validate(email, name, status, type);
+            _validate(email, name, status, category);
 
+            associateNew.setAssociateCategory(category);
             associateNew.setAssociateEmail(email);
             associateNew.setAssociateId(associatedId);
+            associateNew.setAssociatePhoneNumber(phoneNumber);
             associateNew.setAssociateName(name);
             associateNew.setAssociateStatus(status);
-            associateNew.setAssociateCategory(type);
+            associateNew.setModifiedDate(new Date());
 
             return _associatePersistence.save(associateNew);
         }
