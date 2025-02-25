@@ -9,6 +9,7 @@ import com.associate.associate.api.AssociateService;
 import com.associate.benefit.api.BenefitService;
 import com.associate.benefit.api.exception.BenefitNotFound;
 import com.associate.benefit.model.Benefit;
+import com.associate.benefit.model.BenefitResource;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.notify.model.Notify;
 import com.associate.notify.persistence.NotifyPersistence;
@@ -59,27 +60,32 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
+    public BenefitResource fetchBenefitResource(long benefitId) {
+        return _benefitService.fetchBenefitResourcesLatestVersion(benefitId);
+    }
+
+    @Override
     public Benefit findBenefit(long associateId, long benefitId, long companyId)
-        throws AssociateNotFound, BenefitNotFound {
+            throws AssociateNotFound, BenefitNotFound {
 
         if (_associateService.hasAssociateById(associateId, companyId)) {
             return _benefitService.fetchBenefitById(benefitId);
         }
         else throw new AssociateNotFound(
-            "Unable to take benefit from the associate. Associate not found with primary key %s"
-                    .formatted(associateId));
+                "Unable to take benefit from the associate. Associate not found with primary key %s"
+                        .formatted(associateId));
     }
 
     @Override
-    public List<Notify> findNotifiesByReceiverId(long associateId, long companyId)
+    public List<Notify> findNotifiesByReceiverId(long companyId, long receiverId)
         throws AssociateNotFound, CompanyNotFound {
 
-        if (!_associateService.hasAssociateById(associateId, companyId)) {
+        if (!_associateService.hasAssociateById(receiverId, companyId)) {
             return new ArrayList<>();
         }
 
         return _notifyPersistence.findByCompanyIdAndReceiver(
-                companyId, associateId);
+                companyId, receiverId);
     }
 
     @Override
@@ -97,18 +103,39 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public Notify notifyAssociate(
+    public Associate reactivePlanAssociate(
+        long associateId, String status, String category) throws AssociateNotFound {
+
+        Associate associate = _associateService.fetchAssociateById(associateId);
+
+        if (associate == null) {
+            throw new AssociateNotFound(
+                "Unable to reactive plan, associate with id was not found %s"
+                        .formatted(associateId));
+        }
+
+        if (status.equals(AssociateConstantStatus.APPROVED) &&
+                AssociateConstantCategory.getAssociateConstantsTypeList().contains(category)) {
+
+            String email = associate.getAssociateEmail();
+            String phoneNumber = associate.getAssociatePhoneNumber();
+            String name = associate.getAssociateName();
+
+            return _associateService.updateAssociate(
+                    category, associateId, email, phoneNumber, name, status);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Notify sendNotify(
             long associateId, long companyId, String notifyBody, String notifyHeader,
             String notifyTitle, long receiver)
         throws AssociateNotFound {
 
         Associate associateSent = _associateService.fetchAssociateByCompanyId(
                 associateId, companyId);
-
-        if (associateSent == null)
-            throw new AssociateNotFound(
-                "Unable to send notify. Associate not found with id %s"
-                    .formatted(associateId));
 
         Notify notify = new Notify();
 
@@ -128,31 +155,6 @@ public class AssociateActionServiceImpl implements AssociateActionService {
     }
 
     @Override
-    public Associate reactivePlanAssociate(
-        long associateId, String status, String type) throws AssociateNotFound {
-
-        Associate associate = _associateService.fetchAssociateById(associateId);
-
-        if (associate == null) {
-            throw new AssociateNotFound(
-                "Unable to reactive plan, associate with id was not found %s"
-                        .formatted(associateId));
-        }
-
-        if (status.equals(AssociateConstantStatus.APPROVED) &&
-                AssociateConstantCategory.getAssociateConstantsTypeList().contains(type)) {
-
-            String associateEmail = associate.getAssociateEmail();
-            String associateName = associate.getAssociateName();
-
-            return _associateService.updateAssociate(
-                    associateId, associateEmail, associateName, status, type);
-        }
-
-        return null;
-    }
-
-    @Override
     public void shutdown(
         long associateId, long companyId) throws AssociateNotFound {
 
@@ -160,16 +162,10 @@ public class AssociateActionServiceImpl implements AssociateActionService {
             Associate associate = _associateService.fetchAssociateByCompanyId(
                     associateId, companyId);
 
-            if (associate == null) {
-                throw new AssociateNotFound(
-                    "Unable to shutdown associate. Associate not found with id %s"
-                            .formatted(associateId + " " + companyId));
-            }
-
             String notifyBody = "request to leave of membership " +
                     associate.getAssociateName();
 
-            notifyAssociate(
+            sendNotify(
                 associateId, companyId, notifyBody,
                 "request to leave",
                 "request to leave", companyId);
@@ -189,21 +185,16 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
 
-        if (associate == null) {
-            throw new AssociateNotFound(
-                "Unable to updateNotify type. Associate not found with id %s"
-                        .formatted(associateId));
-        }
-
         String type = associate.getAssociateCategory();
 
         if (type.equals(AssociateConstantStatus.APPROVED)) {
-            String associateEmail = associate.getAssociateEmail();
-            String associateName = associate.getAssociateName();
+            String email = associate.getAssociateEmail();
+            String phoneNumber = associate.getAssociatePhoneNumber();
+            String name = associate.getAssociateName();
 
-            _associateService.updateAssociate(
-                    associateId, associateEmail, associateName,
-                    AssociateConstantStatus.SUSPEND, associate.getAssociateCategory());
+            associate = _associateService.updateAssociate(
+                    associate.getAssociateCategory(), associateId, email,
+                    phoneNumber, name, AssociateConstantStatus.SUSPEND);
         }
         else {
             System.out.printf(
@@ -224,22 +215,17 @@ public class AssociateActionServiceImpl implements AssociateActionService {
 
         Associate associate = _associateService.fetchAssociateById(associateId);
 
-        if (associate == null) {
-            throw new AssociateNotFound(
-                "Unable to updateNotify associate plan. Associate not found with id %s".formatted(
-                        associateId));
-        }
-
         if (associate.getAssociateCategory().equals(oldType)) {
             associate.setAssociateCategory(newType);
         }
 
-        String associateEmail = associate.getAssociateEmail();
-        String associateName = associate.getAssociateName();
+        String email = associate.getAssociateEmail();
+        String phoneNumber = associate.getAssociatePhoneNumber();
+        String name = associate.getAssociateName();
 
         _associateService.updateAssociate(
-            associate.getAssociateId(), associateEmail, associateName,
-            associate.getAssociateStatus(), associate.getAssociateCategory());
+            associate.getAssociateCategory(), associateId, email,
+            phoneNumber, name, associate.getAssociateStatus());
     }
 
     private final AssociateService _associateService;

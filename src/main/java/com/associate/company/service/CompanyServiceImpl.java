@@ -157,7 +157,7 @@ public class CompanyServiceImpl implements CompanyService {
         throws NotifyNotFound {
 
         try {
-            Notify notify = _associateActionService.notifyAssociate(
+            Notify notify = _associateActionService.sendNotify(
                 associateId, companyId, notifyBody, notifyHeader,
                 notifyTitle, companyId);
 

@@ -84,7 +84,7 @@ public class AssociateActionRest {
             @PathVariable long associateId, @RequestBody Notify notify,
             @PathVariable long receiver) {
 
-        Notify sentNotify = _associateActionService.notifyAssociate(
+        Notify sentNotify = _associateActionService.sendNotify(
                 associateId, notify.getCompanyId(), notify.getNotifyBody(),
                 notify.getNotifyHeader(), notify.getNotifyTitle(), receiver);
 
@@ -109,7 +109,6 @@ public class AssociateActionRest {
         return new ResponseEntity<>(associate, HttpStatus.OK);
     }
 
-    @Deprecated
     @DeleteMapping("/associate-action/shutdown/{associateId}/{companyId}")
     public ResponseEntity<HttpStatus> shutdownAssociate (
             @PathVariable long associateId, @PathVariable long companyId) {

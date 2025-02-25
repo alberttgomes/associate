@@ -4,6 +4,7 @@ import com.associate.associate.api.exception.AssociateNotFound;
 import com.associate.associate.model.Associate;
 import com.associate.benefit.api.exception.BenefitNotFound;
 import com.associate.benefit.model.Benefit;
+import com.associate.benefit.model.BenefitResource;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.notify.model.Notify;
 
@@ -24,18 +25,6 @@ public interface AssociateActionService {
     List<Benefit> fetchAllBenefits(long companyId) throws CompanyNotFound;
 
     /**
-     * List all benefits that belong the associate id
-     *
-     * @param associateId see @Associate
-     * @param companyId see @Company
-     * @return all benefits by associate and company id
-     * @throws AssociateNotFound an exception occurs if the associate not found
-     * @throws CompanyNotFound an exception occurs if the company not found
-     */
-    List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
-        throws AssociateNotFound, CompanyNotFound;
-
-    /**
      * Return a specific benefit gave that an associate and company id exists
      * and, the benefit exists too
      *
@@ -50,15 +39,36 @@ public interface AssociateActionService {
         throws AssociateNotFound, BenefitNotFound;
 
     /**
-     * List all notifies that belong the associate and company id
+     * List all benefits that belong the associate id
      *
      * @param associateId see @Associate
      * @param companyId see @Company
+     * @return all benefits by associate and company id
+     * @throws AssociateNotFound an exception occurs if the associate not found
+     * @throws CompanyNotFound an exception occurs if the company not found
+     */
+    List<Benefit> fetchAllBenefitByAssociateId(long associateId, long companyId)
+        throws AssociateNotFound, CompanyNotFound;
+
+    /**
+     * List benefit resource metadata as a map of string
+     *
+     * @param benefitId see @Benefit
+     * @return a metadata as a benefit resources map
+     * @throws BenefitNotFound an exception occurs if the benefit not found
+     */
+    BenefitResource fetchBenefitResource(long benefitId) throws BenefitNotFound;
+
+    /**
+     * List all notifies that belong the associate and company id
+     *
+     * @param companyId see @Company
+     * @param receiverId see @Associate
      * @return a list of notifies by associateId, and companyId
      * @throws AssociateNotFound an exception occurs if the associate not found
      * @throws CompanyNotFound an exception occurs if the company not found
      */
-    List<Notify> findNotifiesByReceiverId(long associateId, long companyId)
+    List<Notify> findNotifiesByReceiverId(long companyId, long receiverId)
         throws AssociateNotFound, CompanyNotFound;
 
     /**
@@ -74,23 +84,6 @@ public interface AssociateActionService {
         throws AssociateNotFound, CompanyNotFound;
 
     /**
-     * Send a notify to receiver that can be a company or other associates
-     *
-     * @param associateId see @Associate
-     * @param companyId see @Company
-     * @param notifyBody the body of notify as string value
-     * @param notifyHeader the header of notify as string value
-     * @param notifyTitle the title of notify as string value
-     * @param receiver the receiver identifier as long value
-     * @return notify that was sent
-     * @throws AssociateNotFound an exception occurs if associateId that is sending it is not found.
-     */
-    Notify notifyAssociate(
-            long associateId, long companyId, String notifyBody, String notifyHeader,
-            String notifyTitle, long receiver)
-        throws AssociateNotFound;
-
-    /**
      * Reactive deactivated or suspended associates.
      * Can be possible updateNotify the associate's type
      *
@@ -102,6 +95,23 @@ public interface AssociateActionService {
      */
     Associate reactivePlanAssociate(
             long associateId, String status, String type) throws AssociateNotFound;
+
+    /**
+     * Send notify to other associates or the company himself
+     *
+     * @param associateId see @Associate
+     * @param companyId see @Company
+     * @param notifyBody the body of notify as string value
+     * @param notifyHeader the header of notify as string value
+     * @param notifyTitle the title of notify as string value
+     * @param receiver the receiver identifier as long value
+     * @return notify that was sent
+     * @throws AssociateNotFound an exception occurs if associateId that is sending it is not found.
+     */
+    Notify sendNotify(
+            long associateId, long companyId, String notifyBody, String notifyHeader,
+            String notifyTitle, long receiver)
+        throws AssociateNotFound;
 
     /**
      * Suspend associate setting him status to suspend see @AssociateConstantStatus
