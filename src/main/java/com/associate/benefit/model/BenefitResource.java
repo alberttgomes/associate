@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * @author Albert Gomes Cabral
  */
 @Entity
-public class BenefitResources {
+public class BenefitResource {
 
     public Long getBenefitResourcesId() {
         return benefitResourcesId;

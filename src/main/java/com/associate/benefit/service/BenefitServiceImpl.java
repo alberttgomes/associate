@@ -2,7 +2,7 @@ package com.associate.benefit.service;
 
 import com.associate.benefit.api.BenefitService;
 import com.associate.benefit.api.exception.BenefitNotFound;
-import com.associate.benefit.model.BenefitResources;
+import com.associate.benefit.model.BenefitResource;
 import com.associate.benefit.persistence.BenefitResourcesPersistence;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.benefit.model.Benefit;
@@ -76,14 +76,14 @@ public class BenefitServiceImpl implements BenefitService {
             String metaData = benefit.getBenefitResources();
 
             if (!metaData.isEmpty() && !metaData.isBlank()) {
-                BenefitResources benefitResources = new BenefitResources();
+                BenefitResource benefitResource = new BenefitResource();
 
-                benefitResources.setBenefitId(benefit.getBenefitId());
-                benefitResources.setBenefitName(benefitName);
-                benefitResources.setCreateDate(new Date());
-                benefitResources.setMetaData(metaData);
+                benefitResource.setBenefitId(benefit.getBenefitId());
+                benefitResource.setBenefitName(benefitName);
+                benefitResource.setCreateDate(new Date());
+                benefitResource.setMetaData(metaData);
 
-                _benefitResourcesPersistence.save(benefitResources);
+                _benefitResourcesPersistence.save(benefitResource);
             }
 
             return benefit;
@@ -123,7 +123,7 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
-    public BenefitResources fetchBenefitResourcesLatestVersion(long benefitId)
+    public BenefitResource fetchBenefitResourcesLatestVersion(long benefitId)
         throws BenefitNotFound {
 
         try {
@@ -135,7 +135,7 @@ public class BenefitServiceImpl implements BenefitService {
                             .formatted(benefitId));
             }
 
-            List<BenefitResources> benefitResources =
+            List<BenefitResource> benefitResources =
                     _benefitResourcesPersistence.findByBenefitId(benefitId);
 
             return benefitResources.getFirst();

@@ -1,7 +1,7 @@
 package com.associate.benefit.api;
 
 import com.associate.benefit.api.exception.BenefitNotFound;
-import com.associate.benefit.model.BenefitResources;
+import com.associate.benefit.model.BenefitResource;
 import com.associate.company.api.exception.CompanyNotFound;
 import com.associate.benefit.model.Benefit;
 
@@ -31,7 +31,7 @@ public interface BenefitService {
 
     Benefit fetchBenefitByName(String name) throws BenefitNotFound;
 
-    BenefitResources fetchBenefitResourcesLatestVersion(long benefitId)
+    BenefitResource fetchBenefitResourcesLatestVersion(long benefitId)
         throws BenefitNotFound;
 
     Benefit updateBenefit(
