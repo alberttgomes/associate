@@ -4,6 +4,7 @@ import com.associate.associate.api.AssociateActionService;
 import com.associate.associate.constants.AssociateConstantStatus;
 import com.associate.associate.model.Associate;
 import com.associate.benefit.model.Benefit;
+import com.associate.benefit.model.BenefitResource;
 import com.associate.notify.model.Notify;
 
 import java.util.ArrayList;
@@ -146,6 +147,20 @@ public class AssociateActionRest {
         }
 
         return new ResponseEntity<>(benefits, HttpStatus.OK);
+    }
+
+    @GetMapping("/associate-action/view-benefit-resource-by-benefit-id/{benefitId}")
+    public ResponseEntity<BenefitResource> viewBenefitResourceByBenefitId(
+            @PathVariable long benefitId) {
+
+        BenefitResource benefitResource =
+                _associateActionService.fetchBenefitResource(benefitId);
+
+        if (benefitResource == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(benefitResource, HttpStatus.OK);
     }
 
     private final AssociateActionService _associateActionService;
