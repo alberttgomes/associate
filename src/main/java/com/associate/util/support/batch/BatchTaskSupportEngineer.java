@@ -1,4 +1,4 @@
-package com.associate.support.batch;
+package com.associate.util.support.batch;
 
 import java.io.File;
 import java.io.IOException;
