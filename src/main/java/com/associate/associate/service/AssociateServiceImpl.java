@@ -14,6 +14,7 @@ import com.associate.company.util.CompanyDynamicQuery;
 import com.associate.notify.model.Notify;
 import com.associate.notify.persistence.NotifyPersistence;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -100,7 +101,8 @@ public class AssociateServiceImpl implements AssociateService {
         }
 
         System.out.println(
-            "A new associate was added, but anything workflow process was sent.");
+                Instant.now() + " \\**[WARN]\\** A new associate was added," +
+                    " but anything workflow process was sent.");
 
         return addAssociate(
                 category, email, companyId, name, phoneNumber,
